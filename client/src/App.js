@@ -9,19 +9,22 @@ import {
   Route,
 } from "react-router-dom";
 import Admin from './components/Admin/Admin';
+import Dashboard from './components/Dashboard';
 
 
 function App() {
   return (
-   <>
-   <BrowserRouter>
-   <Routes>
-    <Route path='/' element={<Admin/>}/>
-    <Route path='login' element={<Login/>} />
-    <Route path='signup' element={<Signup/>} />
-   </Routes>
-   </BrowserRouter>
-   </>
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path='login' element={<Login />} />
+          <Route path='/' element={<Signup />} />
+          <Route path='admin' element={<Admin />} />
+          <Route path='dashboard' element={<Dashboard />} />
+
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 
