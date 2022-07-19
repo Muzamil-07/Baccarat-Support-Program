@@ -2,18 +2,42 @@ import React from 'react'
 import { Col, Row } from 'antd';
 import { Button, Form, Input } from 'antd';
 import { Link } from "react-router-dom";
-
+import { message } from 'antd';
 import './Login.css'
+import { useLoginMutation } from '../../services/nodeApi';
+import Cookie from 'js-cookie';
+import { useNavigate } from "react-router-dom";
+
 export default function Login() {
 
 
+  const [ login ]=useLoginMutation();
 
-  const onFinish=( values ) => {
+  const navigate=useNavigate();
+
+  const onFinish=async ( values ) => {
     console.log( 'Success:', values );
+
+    const res=await login( values );
+
+
+
+    if ( res.data.status==='success' ) {
+      message.success( 'Logged in Successfully!' );
+      Cookie.set( 'jwt', res.data.token );
+      setTimeout( () => {
+        navigate( "/dashboard" );
+      }, 2000 )
+
+    }
+    else {
+      message.success( 'Incorrect email or password!' );
+    }
+
   };
 
   const onFinishFailed=( errorInfo ) => {
-    console.log( 'Failed:', errorInfo );
+    message.error( 'Failed to login, Please contact your provider!' );
   };
 
 
@@ -50,7 +74,7 @@ export default function Login() {
               autoComplete="off"
             >
               <Form.Item
-                name="userid"
+                name="userId"
                 rules={[
                   {
                     required: true,
@@ -77,11 +101,10 @@ export default function Login() {
 
               <Form.Item style={{ textAlign: 'center' }}>
                
-                <Link to='/dashboard'>
+
                   <Button htmlType="submit" style={{ paddingLeft: '4rem', paddingRight: '4rem', color: 'white', backgroundColor: 'rgb(228 179 3)' }}>
                     Login
-                  </Button>
-                </Link>
+                </Button>
 
 
               </Form.Item>
