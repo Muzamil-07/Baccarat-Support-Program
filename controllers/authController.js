@@ -9,16 +9,17 @@ const AppError=require( "../utils/appError" );
 
 //Todo:  ************************** helper functuions ******************************
 
-const createSignToken=( id ) => {
+const createSignToken=( user ) => {
     return jwt.sign( {
-        id, //payload(data to encode)
+        id:user._id, //payload(data to encode)
+        role:user.role, //payload(data to encode)
     }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRE_TIME
     } )
 }
 
 const createTokenSendResponse=( statusCode, user, res, req ) => {
-    const token=createSignToken( user._id );
+    const token=createSignToken( user);
 
 
     const cookieOptions={
