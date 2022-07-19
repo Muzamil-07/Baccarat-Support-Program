@@ -54,7 +54,7 @@ const userSchema=new mongoose.Schema( {
 
 
 userSchema.virtual( 'endingTime').get(function(){
-    return new Date(this.startingTime + (this.duration*3600));
+    return new Date(Number(this.startingTime) + (this.duration*60*60*1000));
 })
 
 
