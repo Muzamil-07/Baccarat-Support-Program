@@ -13,6 +13,12 @@ const userSchema=new mongoose.Schema( {
         trim: true
     },
 
+    phone:{
+        type:String,
+        required: [ true, "Enter your phone number" ],
+        unique: [ true, "User with this phone number already exist" ],
+    },
+
     role: {
         type: String,
         enum: [ "user", "admin"],
@@ -29,7 +35,7 @@ const userSchema=new mongoose.Schema( {
         select: false
     },
    
-    staringTime: Date,
+    startingTime: Date,
    
     duration:Number,
 
@@ -47,8 +53,8 @@ const userSchema=new mongoose.Schema( {
 });
 
 
-userSchema.virtual( 'endingTime').get(()=>{
-    return new Date(this.startingTime + this.duration);
+userSchema.virtual( 'endingTime').get(function(){
+    return new Date(this.startingTime + (this.duration*3600));
 })
 
 
@@ -65,8 +71,14 @@ userSchema.pre( 'save', async function ( next ) {
 
 userSchema.pre( 'save', function ( next ) {
     if ( !this.isModified( 'password' )||this.isNew ) return next();
-
     this.changePasswordAt=Date.now()-1000;
+    next()
+} )
+
+
+userSchema.pre( /^find/, function ( next ) {
+    if(this.endingTime<=Date.now() && user.role!='admin')
+    this.duration=0;
     next()
 } )
 

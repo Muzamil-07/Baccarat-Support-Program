@@ -35,7 +35,7 @@ exports.updateOne = ( Model ) => {
         } );
 
         if ( !doc ) {
-            return next( new AppError( `Could not found document with ID: ${req.params.id}`, 404 ) );
+            return next( new AppError( `Could not find the document with ID: ${req.params.id}`, 404 ) );
         }
 
         res.status( 200 ).json( {

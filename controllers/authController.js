@@ -79,12 +79,15 @@ exports.logIn=catchAsync( async ( req, res, next ) => {
     const user=await User.findOne( {
         userId,
         active: true
-    } ).select( '+password' );
+    } ).select("+password");
 
     //? (3) Checking if user is a valid user
-    if ( !user||!( await user.correctPassword( password, user.password ) ) ) {
+    if ( !user||!( await user.correctPassword( password, user.password ) ) ) 
         return next( new AppError( "Incorrect email or password!", 401 ) );
-    }
+    
+    //? (4) Checking if user has been aloted time to login  
+    if(!user.duration && user.role!='admin')
+        return next( new AppError( "You are out of time, please contact the admin", 401 ) );
 
     createTokenSendResponse( 200, user, res, req );
 

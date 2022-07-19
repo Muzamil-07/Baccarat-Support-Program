@@ -1,5 +1,5 @@
 const express=require( "express" );
-const {createUser,getUser, getAllUser}=require( `./../controllers/userController` );
+const {createUser,getUser, getAllUser, changePassword, setDuration}=require( `./../controllers/userController` );
 const {logIn,signUp,protect,restrictTo}=require( "../controllers/authController" );
 const userRouter=express.Router();
 
@@ -20,6 +20,11 @@ userRouter.post('/signup',signUp);
 userRouter.route( "/:id" )
 .get( getUser )
 
+// Change user password
+userRouter.route("/password/:id").patch(changePassword)
+
+// Set Duration
+userRouter.route("/duration/:id").patch(setDuration)
 
 
 module.exports=userRouter;
