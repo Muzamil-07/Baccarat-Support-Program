@@ -1,13 +1,31 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 import './Signup.css'
 import { Col, Row } from 'antd';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input , message } from 'antd';
 import { Link } from "react-router-dom";
+import { useSignupMutation } from '../../services/nodeApi';
 export default function Signup() {
 
+  const [signup] = useSignupMutation();
+  const navigate = useNavigate();
+  const onFinish=async( values ) => {
 
-  const onFinish=( values ) => {
-    console.log( 'Success:', values );
+    const res = await signup(
+      {
+        userId: values.userid,
+        password: values.password,
+        phone: values.phoneNo
+
+      }
+    );
+    if(res.data.status === 'success'){
+      message.success("Signed up succesfully!")
+      navigate('/login')
+    }
+    else{
+      message.error("Something went wrong!")
+    }
   };
 
   const onFinishFailed=( errorInfo ) => {
@@ -83,11 +101,9 @@ export default function Signup() {
               </Form.Item>
 
               <Form.Item style={{ textAlign: 'center' }}>
-                <Link to='/dashboard'>
                   <Button htmlType="submit" style={{ paddingLeft: '4rem', paddingRight: '4rem', color: 'white', backgroundColor: 'rgb(228 179 3)' }}>
                     Signup
                   </Button>
-                </Link>
               </Form.Item>
             </Form>
 
