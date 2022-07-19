@@ -18,13 +18,16 @@ userRouter.post('/signup',signUp);
 
 // Get users
 userRouter.route( "/:id" )
-.get( getUser )
+.get( protect,getUser )
+
+// Get all users
+userRouter.route('/').get(protect,restrictTo('admin'),getAllUser);
 
 // Change user password
-userRouter.route("/password/:id").patch(changePassword)
+userRouter.route("/password/:id").patch(protect,restrictTo('admin'),changePassword)
 
 // Set Duration
-userRouter.route("/duration/:id").patch(setDuration)
+userRouter.route("/duration/:id").patch(protect,restrictTo('admin'),setDuration)
 
 
 module.exports=userRouter;

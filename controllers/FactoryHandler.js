@@ -91,7 +91,7 @@ exports.getAll=( Model, populateOptions, options ) => {
     return catchAsync( async ( req, res, next ) => {
 
 
-        let filterObj = {};
+        let filterObj = {role:'admin'};
      
         const features = new APIFeatures( Model.find( filterObj ), req.query );
 
