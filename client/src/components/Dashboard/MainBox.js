@@ -3,7 +3,10 @@ import { Button } from 'antd';
 import { Col, Divider, Row } from 'antd';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 const MainBox=() => {
   const [ value, setValue ]=useState( 1 )
@@ -28,9 +31,9 @@ const MainBox=() => {
 
 
       <Row justify="space-between" style={{ marginTop: "40px", textAlign: 'center' }}>
-        <Col span={8}> <Button type="primary" className='box_btn win_btn'>Win</Button> </Col>
-        <Col span={8}> <Button type="primary" className='box_btn tie_btn'>Tie</Button> </Col>
-        <Col span={8}> <Button type="primary" className='box_btn loose_btn'>Loose</Button> </Col>
+        <Col span={8}> <Button type="primary" className='box_btn win_btn'>Win <ThumbUpIcon/></Button> </Col>
+        <Col span={8}> <Button type="primary" className='box_btn tie_btn'>Tie<ThumbsUpDownIcon/></Button> </Col>
+        <Col span={8}> <Button type="primary" className='box_btn loose_btn'>Loose<ThumbDownIcon/></Button> </Col>
       </Row>
 
 
@@ -39,7 +42,7 @@ const MainBox=() => {
         <Col span={6}> <Button className='box_btn2 '>New Game</Button> </Col>
         <Col span={6}> <Button className='box_btn2 '>Back</Button> </Col>
         <Col span={6}> <Button className='box_btn2 '>Reset</Button> </Col>
-        <Col span={6}> <Button className='box_btn2 '>Setting</Button> </Col>
+        <Col span={6}> <Button className='box_btn2 '>Setting<SettingsIcon/></Button> </Col>
       </Row>
 
 

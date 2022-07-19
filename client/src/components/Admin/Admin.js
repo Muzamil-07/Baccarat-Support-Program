@@ -27,7 +27,8 @@ export default function Admin() {
     </Breadcrumb.Item>
   </Breadcrumb>
   </div>
-  <div style={{padding:'3rem'}}>
+
+  <div style={{padding:'2rem'}}>
     <UsersTable/>
   </div>
 
