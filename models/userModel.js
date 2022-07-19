@@ -5,25 +5,17 @@ const crypto=require( 'crypto' );
 
 //Optimize:  ************************** User Modal Schema ******************************
 const userSchema=new mongoose.Schema( {
-    name: {
+    userId: {
         type: String,
-        required: [ true, "Enter name!" ],
+        required: [ true, "Enter the user ID" ],
+        unique: [ true, "User with this user ID already exist" ],
+        lowercase:true,
         trim: true
-    },
-
-    email: { // Identifying users by email
-        type: String,
-        unique: [ true, "User with this email already exist" ],
-        required: [ true, "Please provide your email" ],
-        trim: true,
-        lowercase: true,
-        validate: [ validator.isEmail, "Please provide valid email" ]
-
     },
 
     role: {
         type: String,
-        enum: [ "user", "admin", "employee" ],
+        enum: [ "user", "admin"],
         default: "user"
     },
     active: {
@@ -36,19 +28,12 @@ const userSchema=new mongoose.Schema( {
         minLength: [ 8, "Password must be of atleast 8 characters long" ],
         select: false
     },
+   
+    staringTime: Date,
+   
+    duration:Number,
 
-    passwordConfirm: {
-        type: String,
-        required: [ true, 'Please confirm your password' ],
-        validate: {
-            validator: function ( val ) {
-                return val===this.password
-            },
-            message: "Password and Confirm-password are not same!"
-        }
-    },
-
-
+    changePasswordAt:Date,
 } ,
 {
     // TO SEE VIRTUAL FIELDS 
@@ -62,11 +47,10 @@ const userSchema=new mongoose.Schema( {
 });
 
 
-// userSchema.virtual( 'requestApprovalInformation', {
-//     ref: "RequestApproval",
-//     localField: "_id",
-//     foreignField: "user"
-// } )
+userSchema.virtual( 'endingTime').get(()=>{
+    return new Date(this.startingTime + this.duration);
+})
+
 
 
 //Todo: ************************** Document/query/aggregation middlewares ******************************
@@ -75,9 +59,9 @@ userSchema.pre( 'save', async function ( next ) {
     if ( !this.isModified( 'password' ) ) return next();
     // Encrypting the password before saving it to database 
     this.password=await bcrypt.hash( this.password, 12 );
-    this.passwordConfirm=undefined;
     next();
 } )
+
 
 userSchema.pre( 'save', function ( next ) {
     if ( !this.isModified( 'password' )||this.isNew ) return next();
@@ -86,12 +70,6 @@ userSchema.pre( 'save', function ( next ) {
     next()
 } )
 
-userSchema.pre( /^find/, function ( next ) {
-    // this.find( {
-    //     active: true
-    // } );
-    next()
-} )
 
 
 

@@ -6,7 +6,6 @@ const jwt=require( 'jsonwebtoken' );
 const User=require( "../models/userModel" );
 const catchAsync=require( "../utils/catchAysnc" );
 const AppError=require( "../utils/appError" );
-const sendEmail=require( "../utils/email" );
 
 //Todo:  ************************** helper functuions ******************************
 
@@ -49,19 +48,12 @@ const createTokenSendResponse=( statusCode, user, res, req ) => {
 
 // FIX: Signig up the user 
 exports.signUp=catchAsync( async ( req, res, next ) => {
+    
     const newUser=await User.create( {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        password: req.body.password,
-        passwordConfirm: req.body.passwordConfirm,
-        role: req.body.role||"user",
-        CNIC: req.body.CNIC
-        // role: req.body.role||"admin",
-        // photo: req.body.photo
+        userId: req.body.userId,
+        phone: req.body.phone,
+        password: req.body.password
     } );
-
-    // const newUser = await User.create( req.body );
 
     createTokenSendResponse( 201, newUser, res );
 
@@ -74,18 +66,18 @@ exports.signUp=catchAsync( async ( req, res, next ) => {
 exports.logIn=catchAsync( async ( req, res, next ) => {
 
     const {
-        email,
+        userId,
         password
     }=req.body;
 
 
     //? (1) Checking if user inputed email or password
-    if ( !email||!password ) {
-        return next( new AppError( "Please provide email or password!", 400 ) );
+    if ( !userId||!password ) {
+        return next( new AppError( "Please provide userId or password!", 400 ) );
     }
 
     const user=await User.findOne( {
-        email,
+        userId,
         active: true
     } ).select( '+password' );
 
@@ -226,57 +218,7 @@ exports.restrictTo=function ( ...roles ) {
 //     next();
 // }
 
-// Fix: Forgot password implementation
-exports.forgotPassword=catchAsync( async ( req, res, next ) => {
 
-    const {
-        email
-    }=req.body;
-
-    const user=await User.findOne( {
-        email
-    } )
-
-    //? Checking the email entered by user is actually in database
-    if ( !user ) {
-        return next( new AppError( `No user found with email: ${email}`, 404 ) );
-    }
-
-    //? GENERATING Random reset-token and saving encrypted reset-token in database
-    const resetToken=user.createResetToken(); // plain reset-token
-
-
-    await user.save( {
-        validateBeforeSave: false
-    } );
-
-
-    //? Sending it to user's email
-    const resetURL=`${req.protocol}://${req.get( 'host' )}/api/v1/users/resetPassword/${resetToken}`;
-
-    const message=`Forgot your password? Submit a PATCH requets with your new password and passwordConfirm to :\n 
-    ${resetURL}\nIf you didn't forgot your password, please ignore this email! 😊`;
-
-    try {
-        await sendEmail( {
-            email: user.email,
-            subject: 'Your Password Reset Token (valid only for 10 minutes)',
-            message
-        } )
-    } catch ( error ) {
-        user.passwordResetToken=undefined;
-        user.passwordResetTokenExpires=undefined;
-        await user.save( {
-            validateBeforeSave: false
-        } )
-        next( new AppError( "There is an error occur in sending the email!, Please try again later", 500 ) )
-    }
-
-    res.status( 200 ).json( {
-        message: "Password reset token send to your email"
-    } )
-
-} )
 
 
 
