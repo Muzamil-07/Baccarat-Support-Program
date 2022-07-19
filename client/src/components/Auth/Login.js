@@ -16,18 +16,32 @@ export default function Login() {
   const navigate=useNavigate();
 
   const onFinish=async ( values ) => {
-    console.log( 'Success:', values );
 
     const res=await login( values );
-
+    console.log( res.data.data.user.role )
 
 
     if ( res.data.status==='success' ) {
-      message.success( 'Logged in Successfully!' );
-      Cookie.set( 'jwt', res.data.token );
-      setTimeout( () => {
-        navigate( "/dashboard" );
-      }, 2000 )
+
+      if ( res.data.data.user.role==='admin' ) {
+
+        message.success( 'Logged in Successfully!' );
+        Cookie.set( 'jwt', res.data.token );
+        setTimeout( () => {
+          navigate( "/admin" );
+        }, 2000 )
+
+      }
+
+      else if ( res.data.data.user.role==='user' ) {
+        message.success( 'Logged in Successfully!' );
+        Cookie.set( 'jwt', res.data.token );
+        setTimeout( () => {
+          navigate( "/dashboard" );
+        }, 2000 )
+      }
+
+
 
     }
     else {

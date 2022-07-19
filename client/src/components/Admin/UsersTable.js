@@ -1,27 +1,55 @@
-import React , {useState}from 'react'
+import React, { useState, useEffect } from 'react'
 import { Form, Input, InputNumber, Popconfirm, Table, Typography , Tooltip } from 'antd';
+import { useGetAllUsersQuery, useUpdatePasswordMutation } from '../../services/nodeApi';
+import Countdown from "react-countdown";
+
+
 
 export default function UsersTable() {
 
+  const [ updatePassword ]=useUpdatePasswordMutation();
 
+  const Completionist=() => {
+    return <span>Logged out</span>
+  };
+
+
+  const [ data, setData ]=useState( [] );
+  const { data: users, error, isLoading }=useGetAllUsersQuery();
+
+  !isLoading&&console.log( users );
   const { Search } = Input;
 
 
   const originData = [];
 
 
-for (let i = 0; i < 15; i++) {
-  originData.push({
-    key: i.toString(),
-    no: i.toString(),
-    userid: `Edrward ${i}`,
-    password: 32,
-    mobileNumber: `031433213${i}`,
-    timeRemaining: i.toString()
-  });
-}
 
-const [data, setData] = useState(originData);
+  !isLoading&&users.data.data.forEach( ( user, i ) => {
+
+
+
+    originData.push( {
+      key: user._id,
+      no: i+1,
+      userid: user.userId,
+      password: "***********",
+      mobileNumber: user.phone||"940280938",
+      timeRemaining: user.endingTime? ( user.endingTime ):0,
+
+
+    } );
+
+  } );
+
+
+  console.log( "---->", originData, data );
+
+
+  useEffect( () => {
+    setData( originData )
+  }, [] )
+
 
 
 const onSearch = (e) => {
@@ -94,7 +122,10 @@ const EditableCell = ({
     try {
       const row = await form.validateFields();
       const newData = [...data];
-      const index = newData.findIndex((item) => key === item.key);
+      const index=newData.findIndex( ( item ) => key===item.key );
+
+
+      console.log( newData, index )
 
       if (index > -1) {
         const item = newData[index];
@@ -141,7 +172,15 @@ const EditableCell = ({
         title:'Time Remaining',
         dataIndex:'timeRemaining',
         width:'15%',
-        editable:false,
+      editable: false,
+      render: ( value ) => {
+        console.log( value )
+        return (
+          <Countdown date={value}>
+            <Completionist />
+          </Countdown> )
+
+      }
     },
     {
       title: 'operation',
@@ -197,13 +236,22 @@ const EditableCell = ({
         title: col.title,
         editing: isEditing(record),
       }),
+
     };
-  });
+
+  } );
+
+  const onFinish=( values ) => {
+    console.log( values )
+  }
 
 
   return (
     <>
-    <Search
+      {!isLoading&&originData.length>1&&
+        <div>
+
+          <Search
       placeholder="Search by UserID"
       // onSearch={onSearch}
       onChange={onSearch}
@@ -215,7 +263,7 @@ const EditableCell = ({
         
       }}
     />
-     <Form form={form} component={false}>
+          <Form form={form} onFinish={onFinish} component={false}>
       <Table
       style={{marginTop:'1rem'}}
         components={{
@@ -224,7 +272,7 @@ const EditableCell = ({
           },
         }}
         bordered
-        dataSource={data}
+              dataSource={originData}
         columns={mergedColumns}
         rowClassName="editable-row"
         pagination={{
@@ -232,6 +280,8 @@ const EditableCell = ({
         }}
       />
     </Form>
+        </div>
+      }
     </>
   )
 }

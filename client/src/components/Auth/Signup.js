@@ -21,7 +21,10 @@ export default function Signup() {
     );
     if(res.data.status === 'success'){
       message.success("Signed up succesfully!")
-      navigate('/login')
+
+      setTimeout( () => {
+        navigate( '/login' );
+      }, 2000 )
     }
     else{
       message.error("Something went wrong!")

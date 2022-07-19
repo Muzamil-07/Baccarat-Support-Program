@@ -16,7 +16,7 @@ const ProtectedRoute=( {
   const jwt=Cookies.get( 'jwt' );
 
 
-
+  console.log( "======>", jwtDecode( jwt ) )
 
 
 
@@ -24,9 +24,9 @@ const ProtectedRoute=( {
     return <Navigate to={redirectPath} replace />;
   }
 
-  // if ( role&&!role.includes( jwtDecode( jwt ).role ) ) {
-  //   return <Navigate to={'/login'} replace />;
-  // }
+  if ( role&&!role.includes( jwtDecode( jwt ).role ) ) {
+    return <Navigate to={'/login'} replace />;
+  }
 
   return children;
 };

@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import Cookies from 'js-cookie';
 
 const baseUrl="http://127.0.0.1:3001/api/v1";
 
@@ -7,6 +8,7 @@ export const nodeApi=createApi( {
   baseQuery: fetchBaseQuery( { baseUrl } ),
 
   tagTypes: [
+    'Users'
   ],
 
   endpoints: ( builder ) => ( {
@@ -33,10 +35,60 @@ export const nodeApi=createApi( {
 
     } ),
 
+    //******** Get All users
+    getAllUsers: builder.query( {
+      query: () => ( {
+        url: "/users/",
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${Cookies.get( "jwt" )}`,
+        },
+
+      } ),
+      providesTags: [ "Users" ],
+    } ),
+
+
+    //******** Update Password
+    updatePassword: builder.mutation( {
+      query: ( body ) => ( {
+        url: `/users/password/${body.id}`,
+        method: "PATCH",
+        body,
+        headers: {
+          authorization: `Bearer ${Cookies.get( "jwt" )}`,
+        },
+      } ),
+      invalidatesTags: [ "Users" ],
+    } ),
+
+
+    //******** Update Duration
+    updateDuration: builder.mutation( {
+      query: ( body ) => ( {
+        url: `/users/duration/${body.id}`,
+        method: "PATCH",
+        body,
+        headers: {
+          authorization: `Bearer ${Cookies.get( "jwt" )}`,
+        },
+
+      } ),
+      invalidatesTags: [ "Users" ],
+    } ),
+
+
+
+
+
   } )
+
 } )
 
 export const {
   useLoginMutation,
-  useSignupMutation
+  useSignupMutation,
+  useUpdateDurationMutation,
+  useUpdatePasswordMutation,
+  useGetAllUsersQuery,
 }=nodeApi;

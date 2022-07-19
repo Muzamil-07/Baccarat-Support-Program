@@ -91,9 +91,9 @@ exports.getAll=( Model, populateOptions, options ) => {
     return catchAsync( async ( req, res, next ) => {
 
 
-        let filterObj = {role:'admin'};
+        let filterObj={ role: 'user' };
      
-        const features = new APIFeatures( Model.find( filterObj ), req.query );
+        const features=new APIFeatures( Model.find( filterObj ).select( '+password' ), req.query );
 
         features
             .filter()
@@ -106,7 +106,7 @@ exports.getAll=( Model, populateOptions, options ) => {
         let docs;
         if ( options ) {
 
-            query=query.find( options );
+            query=query.find( options ).select( 'userId phone role duration startingTime password' );
 
         }
 
