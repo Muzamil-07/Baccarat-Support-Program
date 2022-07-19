@@ -11,7 +11,9 @@ const Header=() => {
 
       <Link className='header_main_text program_btn' to='/admin'><SurroundSoundIcon fontSize='22' sx={{ marginTop: '8px' }} /> Program</Link>
       <a className='header_main_text'><AccessTimeIcon fontSize='22' sx={{ marginTop: '8px' }} /> Remaining Time: <span className='header_secondary_text'>24:00</span></a>
+
       <a className='header_main_text logout_btn' href='/login'><LogoutIcon fontSize='22' sx={{ marginTop: '8px' }} /> Logout </a>
+
     </div>
 
   )
