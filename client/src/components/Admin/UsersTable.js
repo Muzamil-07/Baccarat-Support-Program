@@ -9,7 +9,8 @@ export default function UsersTable() {
 
   const originData = [];
 
-for (let i = 0; i < 10; i++) {
+
+for (let i = 0; i < 15; i++) {
   originData.push({
     key: i.toString(),
     no: i.toString(),
@@ -20,15 +21,18 @@ for (let i = 0; i < 10; i++) {
   });
 }
 
+const [data, setData] = useState(originData);
 
-const onSearch = (value) => {
+
+const onSearch = (e) => {
 
   const filteredData = originData.filter(entry =>
-    entry.userid.toLowerCase().includes(value.toLowerCase())
+    entry.userid.toLowerCase().includes(e.target.value.toLowerCase())
   );
    
   console.log(filteredData)
-  if(filteredData.length === 0) originData.length = 0
+  if(filteredData.length === 0) setData([])
+  else setData(filteredData)
 };
 
 
@@ -68,7 +72,6 @@ const EditableCell = ({
   };
   
   const [form] = Form.useForm();
-  const [data, setData] = useState(originData);
   const [editingKey, setEditingKey] = useState('');
 
   const isEditing = (record) => record.key === editingKey;
@@ -202,7 +205,8 @@ const EditableCell = ({
     <>
     <Search
       placeholder="Search by UserID"
-      onSearch={onSearch}
+      // onSearch={onSearch}
+      onChange={onSearch}
       style={{
         display:'flex',
         alignItems:'flex-end',

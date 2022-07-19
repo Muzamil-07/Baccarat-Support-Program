@@ -16,7 +16,7 @@ export default function Admin() {
             <Col span={2}><div>Logout</div></Col>
         </Row>
     </div>
-    <div style={{marginTop:'5rem' , marginLeft:'1rem'}}>
+    <div style={{marginTop:'5rem' , marginLeft:'1rem' , marginBottom:'-1.5rem'}}>
 
     <Breadcrumb>
     <Breadcrumb.Item  >
