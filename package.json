@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-
     "client-install": "npm install --prefix client",
     "server": "node server.js",
     "client": "npm start --prefix client",
@@ -25,6 +24,7 @@
     "express-rate-limit": "^5.3.0",
     "helmet": "^4.6.0",
     "hpp": "^0.2.3",
+    "js-cookie": "^3.0.1",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
     "mongoose": "^6.0.8",
