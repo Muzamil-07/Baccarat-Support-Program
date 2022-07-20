@@ -41,9 +41,13 @@ export default function Login() {
         dispatch( setuserData( res.data.data.user ) );
 
         Cookie.set( 'jwt', res.data.token );
+
+
         setTimeout( () => {
           navigate( "/dashboard" );
         }, 2000 )
+
+
       }
 
 

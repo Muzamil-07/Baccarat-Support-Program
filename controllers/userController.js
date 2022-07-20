@@ -30,8 +30,11 @@ exports.changePassword=catchAsync( async ( req, res, next ) => {
 } );
 
 exports.setDuration=catchAsync(async (req,res,next)=>{
-  const user= await User.findById(req.params.id);
-  user.endingTime=new Date(Number(user.endingTime)+24*60*60*1000);
+  const user=await User.findById( req.params.id );
+  if ( user.endingTime>Date.now() )
+    user.endingTime=new Date( Number( user.endingTime )+24*60*60*1000 );
+  else
+    user.endingTime=new Date( Date.now()+24*60*60*1000 );
   await user.save({ validateBeforeSave: false });
   if ( !user ) {
     return next( new AppError( `Could not find the document with ID: ${req.params.id}`, 404 ) );
