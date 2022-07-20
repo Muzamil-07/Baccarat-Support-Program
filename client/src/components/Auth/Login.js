@@ -1,6 +1,6 @@
 import React from 'react'
 import { Col, Row } from 'antd';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input , notification} from 'antd';
 import { Link } from "react-router-dom";
 import { message } from 'antd';
 import './Login.css'
@@ -17,18 +17,15 @@ export default function Login() {
 
   const navigate=useNavigate();
 
+  
+
   const onFinish=async ( values ) => {
 
+    try{
     const res=await login( values );
-    console.log( res.data.data.user )
-
-
-    if ( res.data.status==='success' ) {
-
+    if ( res.data?.status==='success' ) {
       if ( res.data.data.user.role==='admin' ) {
-
         message.success( 'Logged in Successfully!' );
-
         Cookie.set( 'jwt', res.data.token );
         setTimeout( () => {
           navigate( "/admin" );
@@ -39,25 +36,28 @@ export default function Login() {
       else if ( res.data.data.user.role==='user' ) {
         message.success( 'Logged in Successfully!' );
         dispatch( setuserData( res.data.data.user ) );
-
         Cookie.set( 'jwt', res.data.token );
 
 
         setTimeout( () => {
           navigate( "/dashboard" );
         }, 2000 )
-
-
       }
-
-
-
     }
-    else {
-      message.success( 'Incorrect email or password!' );
+    else if(res.error.data.message.includes('Incorrect email or password')){
+      message.error(res.error.data.message)
     }
+    else if(res.error.data.message.includes('You are out of time')){
+      console.log(res)
+      notification.warning({message:'Out of time!',description:`${res.error.data.message}`,duration:0})
+    }
+  }catch(err){
+    // message.error(err.response.data.message)
+  }
+
 
   };
+
 
   const onFinishFailed=( errorInfo ) => {
     message.error( 'Failed to login, Please contact your provider!' );

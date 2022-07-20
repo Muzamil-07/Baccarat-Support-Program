@@ -11,6 +11,7 @@ export default function Signup() {
   const navigate = useNavigate();
   const onFinish=async( values ) => {
 
+    try{
     const res = await signup(
       {
         userId: values.userid,
@@ -19,16 +20,19 @@ export default function Signup() {
 
       }
     );
-    if(res.data.status === 'success'){
+    if(res.data?.status === 'success'){
       message.success("Signed up succesfully!")
 
       setTimeout( () => {
         navigate( '/login' );
       }, 2000 )
     }
-    else{
-      message.error("Something went wrong!")
+    else if(res.error.data.message.includes('Password must be of atleast 8 characters long')){
+      message.error("Password must be of atleast 8 characters long")
     }
+  }catch(err){
+    // console.log(err.response.data.message)
+  }
   };
 
   const onFinishFailed=( errorInfo ) => {
