@@ -77,6 +77,19 @@ export const nodeApi=createApi( {
       invalidatesTags: [ "Users" ],
     } ),
 
+    //******** Update Duration
+    getPattern: builder.mutation( {
+      query: ( body ) => ( {
+        url: `/baccarat/pattern`,
+        method: "POST",
+        body,
+        headers: {
+          authorization: `Bearer ${Cookies.get( "jwt" )}`,
+        },
+
+      } ),
+    } ),
+
 
 
 
@@ -90,5 +103,5 @@ export const {
   useSignupMutation,
   useUpdateDurationMutation,
   useUpdatePasswordMutation,
-  useGetAllUsersQuery,
+  useGetAllUsersQuery, useGetPatternMutation
 }=nodeApi;

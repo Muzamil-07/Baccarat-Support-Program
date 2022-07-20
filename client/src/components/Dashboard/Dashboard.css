@@ -65,7 +65,7 @@
   color: red;
   text-align: center;
   align-items: center;
-  font-size: 45px;
+  font-size: 40px;
   border: 3px solid red;
   left: -2rem;
   top: 0.3rem;
@@ -103,7 +103,7 @@
 }
 
 .course_blue {
-  background-color: rgba(108, 108, 251, 0.656);
+  background-color: rgba(108, 108, 251, 1);
   color: blue;
   border: 5px solid blue;
 }
@@ -191,15 +191,17 @@
 
 .arrows {
   border: 1px solid black;
-  font-size: 25px !important;
+  font-size: 10px !important;
   transition: all 1s;
 }
 
-.arrows:hover {
+/* .arrows:hover {
   cursor: pointer;
   color: white !important;
   background-color: black !important;
 }
+
+*/
 
 .course_inputBox {
   border: 1px solid rgb(49, 49, 49);

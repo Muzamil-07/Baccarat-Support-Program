@@ -9,7 +9,7 @@ const Baccarat = require('../models/baccaratModel');
 exports.getBaccarat=catchAsync( async ( req, res, next ) => {
   
   let {selAmount,selLevel}=req.body;
-  let bac = await Baccarat.find( {selAmount} );
+  let bac=await Baccarat.find( { selAmount: Number( selAmount ) } );
 
   console.log(bac);
 
@@ -20,7 +20,7 @@ exports.getBaccarat=catchAsync( async ( req, res, next ) => {
   let finalPattern=[];
 
   for (let i = 0, j = 0; i < 66; i++ , j++) {
-    if(j>=selLevel)
+    if ( j>=Number( selLevel ) )
     j=0;
    finalPattern.push(bac[0].pattern[j]); 
   }
