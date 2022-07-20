@@ -19,6 +19,7 @@ export default function UsersTable() {
   const [ data, setData ]=useState( [] );
   const { data: users, error, isLoading }=useGetAllUsersQuery();
 
+  !isLoading&&console.log( users );
   const { Search } = Input;
 
 
@@ -278,7 +279,7 @@ const EditableCell = ({
 
   return (
     <>
-      {!isLoading&&originData.length>1&&
+      {!isLoading&&originData.length>0&&
         <div>
 
           <Search

@@ -37,7 +37,10 @@ const userSchema=new mongoose.Schema( {
    
     startingTime: Date,
    
-    duration:Number,
+    duration: {
+        type: Number,
+        default: 0,
+    },
 
     changePasswordAt:Date,
 } ,
@@ -77,7 +80,7 @@ userSchema.pre( 'save', function ( next ) {
 
 
 userSchema.pre( /^find/, function ( next ) {
-    if(this.endingTime<=Date.now() && user.role!='admin')
+    if ( this.endingTime<=Date.now()&&this.role!='admin' )
     this.duration=0;
     next()
 } )
