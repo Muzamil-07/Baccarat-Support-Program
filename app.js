@@ -12,7 +12,8 @@ const cookieParser=require( 'cookie-parser' );
 const AppError=require( './utils/appError' );
 const globalErrorHandler=require( './controllers/errorController' );
 //TODO: Include Routers
-const userRouter=require( './routes/userRouter' )
+const userRouter=require( './routes/userRouter' );
+const baccaratRouter = require('./routes/baccaratRouter');
 const path=require( 'path' );
 
 
@@ -72,6 +73,7 @@ app.use( xss() ) //clean  malicious html code from user input
 
 //TODO: Use Router middleware
 app.use( '/api/v1/users', userRouter );
+app.use( '/api/v1/baccarat', baccaratRouter );
 
 
 
