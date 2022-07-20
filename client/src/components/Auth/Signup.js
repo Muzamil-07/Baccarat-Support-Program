@@ -50,9 +50,9 @@ export default function Signup() {
         <Col className="gutter-row" span={12}>
           <div className='signup_form'>
             <p style={{ textAlign: 'center', color: 'rgb(228 179 3)', fontSize: '3rem', marginBottom: 0 }}>
-              A.I Database
+            AI 데이터베이스
             </p>
-            <p style={{ textAlign: 'center', fontSize: '1.6rem', marginBottom: 15, fontWeight: 'bold' }}>Signup</p>
+            <p style={{ textAlign: 'center', fontSize: '1.6rem', marginBottom: 15, fontWeight: 'bold' }}>가입하기</p>
 
 
 
@@ -71,12 +71,12 @@ export default function Signup() {
                 rules={[
                   {
                     required: true,
-                    message: 'Please input User ID!',
+                    message: '사용자 ID를 입력하세요.',
 
                   },
                 ]}
               >
-                <Input placeholder='Create User ID' />
+                <Input placeholder='사용자 아이디 입력' />
               </Form.Item>
 
               <Form.Item
@@ -85,11 +85,11 @@ export default function Signup() {
                 rules={[
                   {
                     required: true,
-                    message: 'Please input password!',
+                    message: '비밀번호를 입력해주세요',
                   },
                 ]}
               >
-                <Input.Password placeholder='Create Password' />
+                <Input.Password placeholder='비밀번호 생성' />
               </Form.Item>
 
               <Form.Item
@@ -97,11 +97,11 @@ export default function Signup() {
                 rules={[
                   {
                     required: true,
-                    message: 'Please input Mobile Number!',
+                    message: '휴대폰 번호를 입력해주세요',
                   },
                 ]}
               >
-                <Input placeholder='Create Mobile Number' />
+                <Input placeholder='휴대폰 번호 입력' />
 
 
 
@@ -109,13 +109,13 @@ export default function Signup() {
 
               <Form.Item style={{ textAlign: 'center' }}>
                   <Button htmlType="submit" style={{ paddingLeft: '4rem', paddingRight: '4rem', color: 'white', backgroundColor: 'rgb(228 179 3)' }}>
-                    Signup
+                  가입하기
                   </Button>
               </Form.Item>
             </Form>
 
             <div style={{ textAlign: 'center' }}>
-              <Link to='/login' className='login_link'>Already have an account? Login</Link>
+              <Link to='/login' className='login_link'>이미 계정이 있습니까? 로그인</Link>
             </div>
 
           </div>

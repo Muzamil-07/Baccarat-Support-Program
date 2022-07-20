@@ -33,23 +33,24 @@ const Header=() => {
       navigate( '/login' );
 
     }, 1000 )
-    return <span>Logging out.....!</span>
+    return <span>
+    로그아웃 중입니다  .....!</span>
   };
 
   return (
 
 
     <div className='header_main'>
-      <span style={{fontWeight:'bold'}}>Welcome back , {userData.userId}</span>
+      <span style={{fontWeight:'bold'}}>다시 오신 것을 환영합니다 , {userData.userId}</span>
       <span>
-      <Link className='header_main_text program_btn' to='/admin'><SurroundSoundIcon fontSize='22' sx={{ marginTop: '8px' }} /> Program</Link>
-        <a className='header_main_text'><AccessTimeIcon fontSize='15px' sx={{ marginTop: '8px' }} /> Remaining Time: <span className='header_secondary_text'>
+      <Link className='header_main_text program_btn' to='/admin'><SurroundSoundIcon fontSize='22' sx={{ marginTop: '8px' }} /> 프로그램</Link>
+        <a className='header_main_text'><AccessTimeIcon fontSize='15px' sx={{ marginTop: '8px' }} /> 남은 시간 : <span className='header_secondary_text'>
         <Countdown date={new Date(userData.endingTime)}>
           <Completionist />
         </Countdown>
       </span></a>
 
-      <Link className='header_main_text logout_btn' onClick={handleLogout} to='/login'><LogoutIcon fontSize='15px' sx={{ marginTop: '8px' }} /> Logout </Link>
+      <Link className='header_main_text logout_btn' onClick={handleLogout} to='/login'><LogoutIcon fontSize='15px' sx={{ marginTop: '8px' }} /> 로그 아웃 </Link>
 </span> 
     </div>
 

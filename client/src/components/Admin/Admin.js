@@ -29,17 +29,17 @@ return (
     <>
 
     <div className='admin_nav'>
-    <span>Baccarat</span>
-    <span> <a style={{color:'black'}}><PersonIcon fontSize='20px' sx={{marginRight:'5px'}}/>superadmin</a> <a onClick={handleClick} style={{paddingLeft:'2rem' , color:'black'}}><LogoutIcon fontSize='20px' sx={{marginRight:'5px'}}/>Logout</a> </span>
+    <span>바카라</span>
+    <span> <a style={{color:'black'}}><PersonIcon fontSize='20px' sx={{marginRight:'5px'}}/>최고 관리자</a> <a onClick={handleClick} style={{paddingLeft:'2rem' , color:'black'}}><LogoutIcon fontSize='20px' sx={{marginRight:'5px'}}/>로그 아웃</a> </span>
     </div>
     <div style={{marginTop:'5rem' , marginLeft:'1rem' , marginBottom:'-1.5rem'}}>
 
     <Breadcrumb>
     <Breadcrumb.Item  >
-      <HomeOutlined /> Admin
+      <HomeOutlined /> 관리자
     </Breadcrumb.Item>
     <Breadcrumb.Item>
-      <UserOutlined /> Users
+      <UserOutlined /> 사용자
     </Breadcrumb.Item>
   </Breadcrumb>
   </div>

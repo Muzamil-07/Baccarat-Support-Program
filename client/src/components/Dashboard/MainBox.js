@@ -137,9 +137,9 @@ const MainBox=() => {
 
 
       <Row justify="space-between" style={{ marginTop: "40px", textAlign: 'center' }}>
-        <Col span={8}> <Button type="primary" className='box_btn win_btn' disabled={arr.length<4} onClick={handleWin}>Win <ThumbUpIcon sx={{ fontSize: '12px', marginTop: '6px', marginLeft: '4px' }} /></Button> </Col>
-        <Col span={8}> <Button type="primary" className='box_btn tie_btn' disabled={arr.length<4} onClick={handleTie}>Tie<ThumbsUpDownIcon sx={{ fontSize: '12px', marginTop: '6px', marginLeft: '4px' }} /></Button> </Col>
-        <Col span={8}> <Button type="primary" className='box_btn loose_btn' disabled={arr.length<4} onClick={handleLose}>Lose<ThumbDownIcon sx={{ fontSize: '12px', marginTop: '6px', marginLeft: '4px' }} /></Button> </Col>
+        <Col span={8}> <Button type="primary" className='box_btn win_btn' disabled={arr.length<4} onClick={handleWin}>이기다 <ThumbUpIcon sx={{ fontSize: '12px', marginTop: '6px', marginLeft: '4px' }} /></Button> </Col>
+        <Col span={8}> <Button type="primary" className='box_btn tie_btn' disabled={arr.length<4} onClick={handleTie}>묶다<ThumbsUpDownIcon sx={{ fontSize: '12px', marginTop: '6px', marginLeft: '4px' }} /></Button> </Col>
+        <Col span={8}> <Button type="primary" className='box_btn loose_btn' disabled={arr.length<4} onClick={handleLose}>잃다<ThumbDownIcon sx={{ fontSize: '12px', marginTop: '6px', marginLeft: '4px' }} /></Button> </Col>
       </Row>
 
 
@@ -153,7 +153,7 @@ const MainBox=() => {
 
 
       <Modal className='setting_modal' closable={false} width={350} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-        <div style={{textAlign:'center', padding:'1rem'}}>Setting Amount</div>
+        <div style={{textAlign:'center', padding:'1rem'}}>설정 금액</div>
         <div style={{textAlign:'center'}}>
         <Select
       defaultValue=""
@@ -170,7 +170,7 @@ const MainBox=() => {
             <Option value="30009">3000-9</Option>
     </Select>
         </div>
-        <div style={{textAlign:'center' , padding:'1rem'}}>Setting Level</div>
+        <div style={{textAlign:'center' , padding:'1rem'}}>설정 레벨</div>
         <div style={{textAlign:'center'}}>
         <Select
       defaultValue=""
@@ -181,9 +181,9 @@ const MainBox=() => {
       }}
       onChange={handleLevelChange}
     >
-            <Option value="8" disabled={amount==='30009'}>Step 8</Option>
-            <Option value="9">Step 9</Option>
-            <Option value="10" disabled={amount==='30009'}>Step 10</Option>
+            <Option value="8" disabled={amount==='30009'}>단계 8</Option>
+            <Option value="9">단계 9</Option>
+            <Option value="10" disabled={amount==='30009'}>단계 10</Option>
       </Select>
         </div>
 

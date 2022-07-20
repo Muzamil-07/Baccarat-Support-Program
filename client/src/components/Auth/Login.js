@@ -25,7 +25,7 @@ export default function Login() {
     const res=await login( values );
     if ( res.data?.status==='success' ) {
       if ( res.data.data.user.role==='admin' ) {
-        message.success( 'Logged in Successfully!' );
+        message.success( '로그인 성공' );
         Cookie.set( 'jwt', res.data.token );
         setTimeout( () => {
           navigate( "/admin" );
@@ -34,7 +34,7 @@ export default function Login() {
       }
 
       else if ( res.data.data.user.role==='user' ) {
-        message.success( 'Logged in Successfully!' );
+        message.success( '로그인 성공' );
         dispatch( setuserData( res.data.data.user ) );
         Cookie.set( 'jwt', res.data.token );
 
@@ -44,12 +44,12 @@ export default function Login() {
         }, 2000 )
       }
     }
-    else if(res.error.data.message.includes('Incorrect email or password')){
+    else if(res.error.data.message.includes('잘못된 이메일 또는 비밀번호')){
       message.error(res.error.data.message)
     }
-    else if(res.error.data.message.includes('You are out of time')){
+    else if(res.error.data.message.includes('당신은 시간이 없습니다')){
       console.log(res)
-      notification.warning({message:'Out of time!',description:`${res.error.data.message}`,duration:0})
+      notification.warning({message:'시간 중!',description:`${res.error.data.message}`,duration:0})
     }
   }catch(err){
     // message.error(err.response.data.message)
@@ -60,7 +60,7 @@ export default function Login() {
 
 
   const onFinishFailed=( errorInfo ) => {
-    message.error( 'Failed to login, Please contact your provider!' );
+    message.error( '로그인에 실패했습니다. 제공업체에 문의하세요' );
   };
 
 
@@ -80,9 +80,9 @@ export default function Login() {
         <Col className="gutter-row" span={12}>
           <div className='login_form'>
             <p style={{ textAlign: 'center', color: 'rgb(228 179 3)', fontSize: '3rem', marginBottom: 0 }}>
-              A.I Database
+            AI 데이터베이스
             </p>
-            <p style={{ textAlign: 'center', fontSize: '1.6rem', marginBottom: 15, fontWeight: 'bold' }}>Login</p>
+            <p style={{ textAlign: 'center', fontSize: '1.6rem', marginBottom: 15, fontWeight: 'bold' }}>로그인</p>
 
 
 
@@ -101,12 +101,12 @@ export default function Login() {
                 rules={[
                   {
                     required: true,
-                    message: 'Please input your User ID!',
+                    message: '아이디를 입력해주세요',
 
                   },
                 ]}
               >
-                <Input placeholder='User ID' />
+                <Input placeholder='사용자 아이디' />
               </Form.Item>
 
               <Form.Item
@@ -115,18 +115,18 @@ export default function Login() {
                 rules={[
                   {
                     required: true,
-                    message: 'Please input your password!',
+                    message: '비밀번호를 입력해주세요',
                   },
                 ]}
               >
-                <Input.Password placeholder='Password' />
+                <Input.Password placeholder='비밀번호' />
               </Form.Item>
 
               <Form.Item style={{ textAlign: 'center' }}>
                
 
                   <Button htmlType="submit" style={{ paddingLeft: '4rem', paddingRight: '4rem', color: 'white', backgroundColor: 'rgb(228 179 3)' }}>
-                    Login
+                  로그인
                 </Button>
 
 
@@ -134,7 +134,7 @@ export default function Login() {
             </Form>
 
             <div style={{ textAlign: 'center' }}>
-              <Link to='/' className='signup_link'>Create an account? Sign up</Link>
+              <Link to='/' className='signup_link'>계정을 만드시겠습니까? 가입하기</Link>
             </div>
           </div>
         </Col>

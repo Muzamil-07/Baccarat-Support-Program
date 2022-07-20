@@ -39,7 +39,7 @@ export default function UsersTable() {
       >
         <Input
           ref={searchInput}
-          placeholder={`Search ${dataIndex}`}
+          placeholder={`사용자 검색`}
           value={selectedKeys[ 0 ]}
           onChange={( e ) => setSelectedKeys( e.target.value? [ e.target.value ]:[] )}
           onPressEnter={() => handleSearch( selectedKeys, confirm, dataIndex )}
@@ -58,7 +58,9 @@ export default function UsersTable() {
               width: 90,
             }}
           >
-            Search
+            
+검색
+
           </Button>
           <Button
             onClick={() => clearFilters&&handleReset( clearFilters )}
@@ -67,7 +69,9 @@ export default function UsersTable() {
               width: 90,
             }}
           >
-            Reset
+           
+초기화
+
           </Button>
 
         </Space>
@@ -114,7 +118,7 @@ export default function UsersTable() {
 
 
   const Completionist=() => {
-    return <span>Logged out</span>
+    return <span>로그아웃</span>
   };
 
 
@@ -136,7 +140,7 @@ export default function UsersTable() {
       no: i+1,
       userid: user.userId,
       password: "***********",
-      mobileNumber: user.phone||"940280938",
+      mobileNumber: user.phone,
       timeRemaining: user.endingTime? ( user.endingTime ):0,
 
 
@@ -194,7 +198,7 @@ const EditableCell = ({
             rules={[
               {
                 required: true,
-                message: `Please Input ${title}!`,
+                message: `비밀번호를 입력해주세요`,
               },
             ]}
           >
@@ -236,10 +240,10 @@ const EditableCell = ({
       })
       if(res.data.status === 'success'){
         message.success({
-          content:"Password updated successfully!",
+          content:`비밀번호가 성공적으로 업데이트되었습니다.`,
         })
       }else{
-        message.error("Something went wrong! Try again")
+        message.error("문제가 발생했습니다 다시 시도하십시오")
       }
 
       const index=newData.findIndex( ( item ) => key===item.key );
@@ -272,7 +276,7 @@ const EditableCell = ({
 
     {
       key: 'userid',
-      title: 'UserID',
+      title: '사용자 아이디',
       dataIndex: 'userid',
       width: '20%',
       editable: false,
@@ -280,19 +284,19 @@ const EditableCell = ({
     },
     {
       key: 'password',
-      title: 'Password',
+      title: '비밀번호',
       dataIndex: 'password',
       width: '18%',
       editable: true,
     },
     {
-      title: 'Mobile Number',
+      title: '휴대폰 번호',
       dataIndex: 'mobileNumber',
       width: '22%',
       editable: false,
     },
     {
-        title:'Time Remaining',
+        title:'남은 시간',
         dataIndex:'timeRemaining',
         width:'15%',
       editable: false,
@@ -305,7 +309,7 @@ const EditableCell = ({
       }
     },
     {
-      title: 'operation',
+      title: '작업',
       dataIndex: 'operation',
       render: (_, record) => {
         const editable = isEditing(record);
@@ -317,24 +321,25 @@ const EditableCell = ({
                 marginRight: 8,
               }}
             >
-              Save
+              저장
             </Typography.Link>
-            <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-              <a>Cancel</a>
+            <Popconfirm title="취소하시겠습니까" onConfirm={cancel}>
+              <a>취소</a>
             </Popconfirm>
           </span>
         ) : (
             <>
-            <Tooltip title="Edit user's password" placement='left'>
+            <Tooltip title="사용자 비밀번호 수정" placement='left'>
           <Typography.Link disabled={editingKey !== ''}  onClick={() => {
             edit(record)
             }}>
-            Edit
+          편집하다
           </Typography.Link>
           </Tooltip>
-          <Tooltip title='Allot extra time to this user' placement='bottom'>
-          <Popconfirm placement="top" title='Allot 24 Hours to this user?' onConfirm={()=>confirm(record)} okText="Yes" cancelText="No">
-          <Typography.Link style={{paddingLeft:'2rem'}}>Allot Time</Typography.Link>
+          <Tooltip title='이 사용자에게 추가 시간 할당' placement='bottom'>
+          <Popconfirm placement="top" title='이 사용자에게 24시간을 할당하시겠습니까' onConfirm={()=>confirm(record)} okText="Yes" cancelText="No">
+          <Typography.Link style={{paddingLeft:'2rem'}}>
+할당 시간</Typography.Link>
           </Popconfirm>
           </Tooltip>
             </>
@@ -348,9 +353,9 @@ const EditableCell = ({
       id: record.key,
       })
     if(res.data.status.includes("successfully")){
-      message.success("24 Hours added to this user successfully!")
+      message.success("이 사용자에게 24시간이 성공적으로 추가되었습니다")
     }else{
-      message.error("Something went wrong! Try again")
+      message.error("문제가 발생했습니다 다시 시도하십시오")
     }
 }
 
