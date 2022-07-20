@@ -1,6 +1,6 @@
 .header_main {
   display: flex;
-  justify-content: right;
+  justify-content: space-between;
   align-items: center;
   padding: 0 20px;
   height: 60px;
@@ -9,7 +9,7 @@
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 100000;
+  z-index: 100;
 
 }
 
@@ -205,5 +205,27 @@
   border: 1px solid rgb(49, 49, 49);
   font-size: 25px;
   text-align: center;
-  /* padding: 5px 60px; */
+}
+
+.setting_modal .ant-modal-footer{
+  text-align: center !important;
+}
+
+.setting_modal .ant-modal-footer .ant-btn-default{
+  border:1px solid red !important;
+  color: red !important;
+}
+.setting_modal .ant-modal-footer .ant-btn-primary{
+  border:1px solid blue !important;
+  background: none !important;
+  color: blue !important;
+}
+
+.setting_modal .ant-modal-footer .ant-btn-default:hover {
+  color: white !important;
+  background:red !important;
+}
+.setting_modal .ant-modal-footer .ant-btn-primary:hover{
+  color: white !important;
+  background:blue !important;
 }

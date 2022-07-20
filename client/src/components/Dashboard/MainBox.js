@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button } from 'antd';
+import { Button , Modal , Select} from 'antd';
 import { Col, Row } from 'antd';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -9,6 +9,37 @@ import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 const MainBox=() => {
+
+  const { Option } = Select;
+
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+
+  const handleAmountChange = (value) => {
+    console.log(`selected ${value}`);
+  };
+  
+
+  const handleLevelChange = (value) => {
+    console.log(`selected ${value}`);
+  };
+  
+
+
+
   const [ value, setValue ]=useState( 1 )
 
   const changeCourseValue=( condition ) => {
@@ -42,8 +73,46 @@ const MainBox=() => {
         <Col span={6}> <Button className='box_btn2 '>New Game</Button> </Col>
         <Col span={6}> <Button className='box_btn2 '>Back</Button> </Col>
         <Col span={6}> <Button className='box_btn2 '>Reset</Button> </Col>
-        <Col span={6}> <Button className='box_btn2 '><SettingsIcon sx={{ marginTop: '2px', fontSize: '15px', fontWeight: 'bold' }} /></Button> </Col>
+        <Col span={6}> <Button className='box_btn2 ' onClick={showModal}><SettingsIcon sx={{ marginTop: '2px', fontSize: '15px', fontWeight: 'bold' }} /></Button> </Col>
       </Row>
+
+
+      <Modal className='setting_modal' closable={false} width={350} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+        <div style={{textAlign:'center', padding:'1rem'}}>Setting Amount</div>
+        <div style={{textAlign:'center'}}>
+        <Select
+      defaultValue=""
+      style={{
+        width: 180,
+        border:'2px solid blue',
+        borderRadius:'4px',
+      }}
+      onChange={handleAmountChange}
+    >
+      <Option value="1000">1000</Option>
+      <Option value="2000">2000</Option>
+      <Option value="3000">3000</Option>
+      <Option value="3000-9">3000 - 9</Option>
+    </Select>
+        </div>
+        <div style={{textAlign:'center' , padding:'1rem'}}>Setting Level</div>
+        <div style={{textAlign:'center'}}>
+        <Select
+      defaultValue=""
+      style={{
+        width: 180,
+        border:'2px solid blue',
+        borderRadius:'4px',
+      }}
+      onChange={handleLevelChange}
+    >
+      <Option value="step8">Step 8</Option>
+      <Option value="step9">Step 9</Option>
+      <Option value="step10">Step 10</Option>
+      </Select>
+        </div>
+
+      </Modal>
 
 
 

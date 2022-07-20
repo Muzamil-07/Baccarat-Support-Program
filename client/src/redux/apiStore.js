@@ -4,9 +4,11 @@ import { nodeApi } from "../services/nodeApi";
 import storage from "redux-persist/lib/storage";
 import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
+import userReducer from "./userSlice";
 
 const reducers = combineReducers({
   [nodeApi.reducerPath]: nodeApi.reducer,
+  user: userReducer
 });
 
 const persistConfig = {

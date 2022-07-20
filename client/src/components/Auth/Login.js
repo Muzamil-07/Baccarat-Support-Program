@@ -7,9 +7,11 @@ import './Login.css'
 import { useLoginMutation } from '../../services/nodeApi';
 import Cookie from 'js-cookie';
 import { useNavigate } from "react-router-dom";
+import { setuserData } from '../../redux/userSlice';
+import { useDispatch } from 'react-redux';
 
 export default function Login() {
-
+  const dispatch=useDispatch();
 
   const [ login ]=useLoginMutation();
 
@@ -18,7 +20,7 @@ export default function Login() {
   const onFinish=async ( values ) => {
 
     const res=await login( values );
-    console.log( res.data.data.user.role )
+    console.log( res.data.data.user )
 
 
     if ( res.data.status==='success' ) {
@@ -26,6 +28,7 @@ export default function Login() {
       if ( res.data.data.user.role==='admin' ) {
 
         message.success( 'Logged in Successfully!' );
+
         Cookie.set( 'jwt', res.data.token );
         setTimeout( () => {
           navigate( "/admin" );
@@ -35,6 +38,8 @@ export default function Login() {
 
       else if ( res.data.data.user.role==='user' ) {
         message.success( 'Logged in Successfully!' );
+        dispatch( setuserData( res.data.data.user ) );
+
         Cookie.set( 'jwt', res.data.token );
         setTimeout( () => {
           navigate( "/dashboard" );

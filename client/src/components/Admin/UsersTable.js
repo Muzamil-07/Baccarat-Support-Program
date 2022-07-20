@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Form, Input, InputNumber, Popconfirm, Table, Typography , Tooltip, message } from 'antd';
 import { useGetAllUsersQuery, useUpdateDurationMutation, useUpdatePasswordMutation } from '../../services/nodeApi';
 import Countdown from "react-countdown";
-import { async } from 'regenerator-runtime';
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Space } from 'antd';
 
@@ -10,6 +9,9 @@ import Highlighter from 'react-highlight-words';
 
 
 export default function UsersTable() {
+
+  const editRef = useRef(null);
+  const refForm = useRef(null);
 
   const [ updatePassword ]=useUpdatePasswordMutation();
   const [ updateDuration] = useUpdateDurationMutation();
@@ -119,8 +121,6 @@ export default function UsersTable() {
   const [ data, setData ]=useState( [] );
   const { data: users, error, isLoading }=useGetAllUsersQuery();
 
-  !isLoading&&console.log( users );
-  const { Search } = Input;
 
 
   const originData = [];
@@ -157,9 +157,19 @@ export default function UsersTable() {
 const [PASSWORD, setPASSWORD] = useState('');
 
 const handlePassChange = (e)=>{
-
   setPASSWORD(e.target.value)    
 
+  if(e.target.value.includes('*****')){
+    refForm.current.resetFields();
+
+  }
+}
+
+const handlePassInputClick = (e) =>{
+  if(e.target.value.includes('*****')){
+    refForm.current.resetFields();
+
+  }
 }
 
 const EditableCell = ({
@@ -172,7 +182,7 @@ const EditableCell = ({
     children,
     ...restProps
   }) => {
-    const inputNode = <Input name='PASSWORD' value={PASSWORD} key="PASSWORD" autoFocus='autoFocus' onChange={handlePassChange}/>;
+    const inputNode = <Input name='PASSWORD' ref={editRef} onClick={handlePassInputClick} value={PASSWORD} key="PASSWORD" autoFocus='autoFocus' onChange={handlePassChange}/>;
     return (
       <td {...restProps}>
         {editing ? (
@@ -316,7 +326,9 @@ const EditableCell = ({
         ) : (
             <>
             <Tooltip title="Edit user's password" placement='left'>
-          <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
+          <Typography.Link disabled={editingKey !== ''}  onClick={() => {
+            edit(record)
+            }}>
             Edit
           </Typography.Link>
           </Tooltip>
@@ -371,8 +383,7 @@ const EditableCell = ({
       {!isLoading&&originData.length>0&&
         <div>
 
-
-          <Form form={form} onFinish={onFinish} component={false}>
+          <Form form={form} ref={refForm} onFinish={onFinish} component={false}>
       <Table
       style={{marginTop:'1rem'}}
         components={{
