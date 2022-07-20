@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button } from 'antd';
-import { Col, Divider, Row } from 'antd';
+import { Col, Row } from 'antd';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';

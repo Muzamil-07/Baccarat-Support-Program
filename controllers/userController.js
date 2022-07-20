@@ -24,7 +24,7 @@ exports.changePassword=catchAsync( async ( req, res, next ) => {
   await user.save({ validateBeforeSave: false });
 
   res.status( 200 ).json( {
-      status: 'Password has been reset successfully',
+      status: 'success',
   } );
 
 } );

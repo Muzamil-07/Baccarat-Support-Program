@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { Form, Input, InputNumber, Popconfirm, Table, Typography , Tooltip } from 'antd';
-import { useGetAllUsersQuery, useUpdatePasswordMutation } from '../../services/nodeApi';
+import { Form, Input, InputNumber, Popconfirm, Table, Typography , Tooltip, message } from 'antd';
+import { useGetAllUsersQuery, useUpdateDurationMutation, useUpdatePasswordMutation } from '../../services/nodeApi';
 import Countdown from "react-countdown";
+import { async } from 'regenerator-runtime';
 
 
 
 export default function UsersTable() {
 
   const [ updatePassword ]=useUpdatePasswordMutation();
+  const [ updateDuration] = useUpdateDurationMutation();
 
   const Completionist=() => {
     return <span>Logged out</span>
@@ -17,7 +19,6 @@ export default function UsersTable() {
   const [ data, setData ]=useState( [] );
   const { data: users, error, isLoading }=useGetAllUsersQuery();
 
-  !isLoading&&console.log( users );
   const { Search } = Input;
 
 
@@ -43,7 +44,6 @@ export default function UsersTable() {
   } );
 
 
-  console.log( "---->", originData, data );
 
 
   useEffect( () => {
@@ -63,6 +63,13 @@ const onSearch = (e) => {
   else setData(filteredData)
 };
 
+const [PASSWORD, setPASSWORD] = useState('');
+
+const handlePassChange = (e)=>{
+
+  setPASSWORD(e.target.value)    
+
+}
 
 const EditableCell = ({
     editing,
@@ -74,7 +81,7 @@ const EditableCell = ({
     children,
     ...restProps
   }) => {
-    const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
+    const inputNode = <Input name='PASSWORD' value={PASSWORD} key="PASSWORD" autoFocus='autoFocus' onChange={handlePassChange}/>;
     return (
       <td {...restProps}>
         {editing ? (
@@ -122,10 +129,19 @@ const EditableCell = ({
     try {
       const row = await form.validateFields();
       const newData = [...data];
+      const res = await updatePassword({
+        id:key,
+        password:PASSWORD
+      })
+      if(res.data.status === 'success'){
+        message.success({
+          content:"Password updated successfully!",
+        })
+      }else{
+        message.error("Something went wrong! Try again")
+      }
+
       const index=newData.findIndex( ( item ) => key===item.key );
-
-
-      console.log( newData, index )
 
       if (index > -1) {
         const item = newData[index];
@@ -141,6 +157,13 @@ const EditableCell = ({
       console.log('Validate Failed:', errInfo);
     }
   };
+
+
+  const handleAllotTimeClick = async(e,values)=>{
+    const res = await updateDuration();
+    console.log(values)
+
+  }
 
   const columns = [
     {
@@ -174,7 +197,6 @@ const EditableCell = ({
         width:'15%',
       editable: false,
       render: ( value ) => {
-        console.log( value )
         return (
           <Countdown date={value}>
             <Completionist />
@@ -209,7 +231,7 @@ const EditableCell = ({
           </Typography.Link>
           </Tooltip>
           <Tooltip title='Allot extra time to this user' placement='bottom'>
-          <Popconfirm placement="top" title='Allot 24 Hours to this user?' onConfirm={confirm} okText="Yes" cancelText="No">
+          <Popconfirm placement="top" title='Allot 24 Hours to this user?' onConfirm={()=>confirm(record)} okText="Yes" cancelText="No">
           <Typography.Link style={{paddingLeft:'2rem'}}>Allot Time</Typography.Link>
           </Popconfirm>
           </Tooltip>
@@ -219,9 +241,17 @@ const EditableCell = ({
     },
   ];
 
-  const confirm = () => {
-    alert('ok')
-  };
+  const confirm = async(record) => {    
+    const res = await updateDuration({
+        id:record.key
+      })
+    if(res.data.status.includes("successfully")){
+      message.success("24 Hours added to this user successfully!")
+    }else{
+      message.error("Something went wrong! Try again")
+    }
+}
+
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {
       return col;

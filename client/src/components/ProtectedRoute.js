@@ -1,5 +1,5 @@
 import React from "react";
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 import jwtDecode from "jwt-decode";
 
@@ -12,13 +12,7 @@ const ProtectedRoute=( {
 } ) => {
 
   // Check user token here
-  const navigate=useNavigate();
   const jwt=Cookies.get( 'jwt' );
-
-
-  console.log( "======>", jwtDecode( jwt ) )
-
-
 
   if ( !jwt ) {
     return <Navigate to={redirectPath} replace />;
