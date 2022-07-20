@@ -29,6 +29,7 @@
     "lodash": "^4.17.21",
     "mongoose": "^6.0.8",
     "morgan": "^1.10.0",
+    "nodemon": "^2.0.19",
     "regenerator-runtime": "^0.13.9",
     "slugify": "^1.6.0",
     "validator": "^13.6.0",
