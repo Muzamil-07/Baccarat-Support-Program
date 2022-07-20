@@ -30,11 +30,13 @@ exports.changePassword=catchAsync( async ( req, res, next ) => {
 } );
 
 exports.setDuration=catchAsync(async (req,res,next)=>{
-  const user= await User.findByIdAndUpdate(req.params.id,{duration:req.body.duration,startingTime:Date.now()});
+  const user= await User.findById(req.params.id);
+  user.endingTime=new Date(Number(user.endingTime)+24*60*60*1000);
+  await user.save({ validateBeforeSave: false });
   if ( !user ) {
     return next( new AppError( `Could not find the document with ID: ${req.params.id}`, 404 ) );
   }
   res.status( 200 ).json( {
-    status: `Duration has been set successfully to ${req.body.duration} hours.`,
+    status: `Duration has been set successfully.`,
 } );
 })

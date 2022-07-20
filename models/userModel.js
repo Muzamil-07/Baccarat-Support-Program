@@ -35,12 +35,11 @@ const userSchema=new mongoose.Schema( {
         select: false
     },
    
-    startingTime: Date,
-   
-    duration: {
-        type: Number,
-        default: 0,
+    endingTime: {
+        type:Date,
+        default:Date.now()
     },
+ 
 
     changePasswordAt:Date,
 } ,
@@ -56,9 +55,6 @@ const userSchema=new mongoose.Schema( {
 });
 
 
-userSchema.virtual( 'endingTime').get(function(){
-    return new Date(Number(this.startingTime) + (this.duration*60*60*1000));
-})
 
 
 
@@ -77,15 +73,6 @@ userSchema.pre( 'save', function ( next ) {
     this.changePasswordAt=Date.now()-1000;
     next()
 } )
-
-
-userSchema.pre( /^find/, function ( next ) {
-    if ( this.endingTime<=Date.now()&&this.role!='admin' )
-    this.duration=0;
-    next()
-} )
-
-
 
 
 //Fix:  ************************** instance methods of documents ******************************
