@@ -244,7 +244,8 @@ const EditableCell = ({
 
   const confirm = async(record) => {    
     const res = await updateDuration({
-        id:record.key
+      id: record.key,
+      duration: 24
       })
     if(res.data.status.includes("successfully")){
       message.success("24 Hours added to this user successfully!")

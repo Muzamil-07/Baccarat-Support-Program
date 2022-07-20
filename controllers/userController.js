@@ -35,6 +35,6 @@ exports.setDuration=catchAsync(async (req,res,next)=>{
     return next( new AppError( `Could not find the document with ID: ${req.params.id}`, 404 ) );
   }
   res.status( 200 ).json( {
-    status: `Duration has been set successfully to ${user.duration} hours.`,
+    status: `Duration has been set successfully to ${req.body.duration} hours.`,
 } );
 })
