@@ -23,13 +23,14 @@ const Header=() => {
 
   const handleLogout=() => {
     Cookies.remove( 'jwt' );
-
+    localStorage.removeItem( 'persist:root' )
   }
 
   const Completionist=() => {
 
     setTimeout( () => {
       handleLogout();
+      localStorage.removeItem( 'persist:root' )
       navigate( '/login' );
 
     }, 1000 )

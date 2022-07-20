@@ -8,20 +8,36 @@ import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { useGetPatternMutation } from '../../services/nodeApi';
+import { useSelector } from 'react-redux';
+import { useDispatch } from "react-redux";
+import { setValue } from '../../redux/valueSlice';
+import { setIndex } from '../../redux/indexSlice';
+import { setArr } from '../../redux/arrSlice';
+import { setColors } from '../../redux/colorSlice';
+
 
 const MainBox=() => {
 
   const { Option } = Select;
+  const dispatch=useDispatch();
 
-
-  const [ arr, setArr ]=useState( [ '', '', '' ] )
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [ level, setLevel ]=useState( null )
   const [ amount, setAmount ]=useState( null )
-  const [ index, setIndex ]=useState( 0 );
-  const [ value, setValue ]=useState( 1 )
+
+  // const [ arr, setArr ]=useState( [ '', '', '' ] )
+  // const [ index, setIndex ]=useState( 0 );
+  // const [ value, setValue ]=useState( 1 )
+  // const [ colors, setColors ]=useState( [] )
+
+
+
+  const { value }=useSelector( ( state ) => state.val );
+  const { index }=useSelector( ( state ) => state.ind );
+  const { arr }=useSelector( ( state ) => state.arr );
+  const { colors }=useSelector( ( state ) => state.col );
+
   const [ getPattern ]=useGetPatternMutation()
-  const [ colors, setColors ]=useState( [] )
 
 
   const randomColors=() => {
@@ -34,7 +50,7 @@ const MainBox=() => {
         arr[ i ]='blue'
       }
     };
-    setColors( arr );
+    dispatch( setColors( arr ) );
     console.log( 'array >>>>>>>>>>>>>>>>>>', arr );
   }
 
@@ -45,7 +61,7 @@ const MainBox=() => {
   const handleOk=async () => {
     setIsModalVisible( false );
     const res=await getPattern( { selAmount: amount, selLevel: level } );
-    setArr( res.data.data );
+    dispatch( setArr( res.data.data ) );
     randomColors();
   }
   const handleCancel = () => {
@@ -77,13 +93,13 @@ const MainBox=() => {
   const changeCourseValue=( condition ) => {
     if ( condition==='up' ) {
       if ( value!==66 ) {
-        setValue( value+1 )
-        setIndex( index+1 )
+        dispatch( setValue( value+1 ) )
+        dispatch( setIndex( index+1 ) )
       } 
     } else {
       if ( value!==1 ) {
-        setValue( value-1 )
-        setIndex( index-1 );
+        dispatch( setValue( value-1 ) )
+        dispatch( setIndex( index-1 ) );
       }
     }
 
@@ -94,36 +110,36 @@ const MainBox=() => {
   const handleWin=() => {
     changeCourseValue( 'up' );
     randomColors()
-    setIndex( 0 );
+    dispatch( setIndex( 0 ) );
   }
 
   const handleLose=() => {
     changeCourseValue( 'up' );
-    setIndex( index+1 );
+    dispatch( setIndex( index+1 ) );
   }
 
   const handleTie=() => {
     if ( value!==66 ) {
-      setValue( value+1 )
+      dispatch( setValue( value+1 ) )
     }
     else {
       if ( value!==1 ) {
-        setValue( value-1 )
+        dispatch( setValue( value-1 ) )
       }
     }
   }
 
 
   const handleNewGame=() => {
-    setIndex( 0 );
-    setValue( 1 );
-    setArr( [ '', '', '' ] );
+    dispatch( setIndex( 0 ) );
+    dispatch( setValue( 1 ) );
+    dispatch( setArr( [ '', '', '' ] ) );
   }
 
   const handleBack=() => {
     // changeCourseValue( 'down' );
     if ( index>0 )
-      setIndex( index-1 );
+      dispatch( setIndex( index-1 ) );
   }
 
   return (
@@ -132,7 +148,7 @@ const MainBox=() => {
 
       <div className='amount_box'>
         <div className={`course_no course_${colors[ index ]}`}>{index+1}</div>
-        <div className='amount'>{arr.length>3? arr[ index ].toLocaleString():0} Amount</div>
+        <div className='amount'>{arr.length>3? arr[ index ].toLocaleString():0} 총액 </div>
       </div>
 
 
@@ -145,9 +161,9 @@ const MainBox=() => {
 
 
       <Row justify="space-between" style={{ marginTop: "30px", textAlign: 'center' }}>
-        <Col span={6}> <Button className='box_btn2 ' onClick={handleNewGame}>New Game</Button> </Col>
-        <Col span={6}> <Button className='box_btn2 ' onClick={handleBack}>Back</Button> </Col>
-        <Col span={6}> <Button className='box_btn2 ' onClick={handleReset}>Reset</Button> </Col>
+        <Col span={6}> <Button className='box_btn2 ' disabled={arr.length<=3} onClick={handleNewGame}>새로운 게임</Button> </Col>
+        <Col span={6}> <Button className='box_btn2 ' onClick={handleBack} disabled={arr.length<=3||index===0}>뒤</Button> </Col>
+        <Col span={6}> <Button className='box_btn2 ' disabled={arr.length<=3} onClick={handleReset}>초기화</Button> </Col>
         <Col span={6}> <Button className='box_btn2 ' onClick={showModal}><SettingsIcon sx={{ marginTop: '2px', fontSize: '15px', fontWeight: 'bold' }} /></Button> </Col>
       </Row>
 
@@ -205,16 +221,16 @@ const MainBox=() => {
       <Row justify="space-between" style={{ marginTop: "30px", textAlign: 'center' }}>
         <Col span={8}>
           <div className={`courses course_${index-1<0? '':colors[ index-1 ]}`}><span>{index-1<0? '':`#${index}`}</span></div>
-          <div className='bet_amount '>{index-1<0? '':arr[ index-1 ]}</div>
+          <div className={`bet_amount bet_amount_${index-1<0? '':colors[ index-1 ]}`}>{index-1<0? '':arr[ index-1 ].toLocaleString()}</div>
         </Col>
         <Col span={8}>
           <div className={`courses course_${colors[ index ]}`}> #<span>{index+1}</span></div>
-          <div className='bet_amount bet_amount_red'>{arr[ index ]}</div>
+          <div className={`bet_amount bet_amount_${colors[ index ]}`}>{arr[ index ].toLocaleString()}</div>
         </Col>
 
         <Col span={8}>
           <div className={`courses course_${colors[ index+1 ]}`}> #<span>{index+2}</span></div>
-          <div className='bet_amount bet_amount_blue'>{arr[ index+1 ]}</div>
+          <div className={`bet_amount bet_amount_${colors[ index+1 ]}`}>{arr[ index+1 ].toLocaleString()}</div>
         </Col>
       </Row>
 

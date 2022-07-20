@@ -5,10 +5,19 @@ import storage from "redux-persist/lib/storage";
 import { combineReducers } from "redux";
 import { persistReducer } from "redux-persist";
 import userReducer from "./userSlice";
+import valueReducer from "./valueSlice";
+import indexReducer from "./indexSlice";
+import arrReducer from "./arrSlice";
+import colorReducer from "./colorSlice";
+
 
 const reducers = combineReducers({
   [nodeApi.reducerPath]: nodeApi.reducer,
-  user: userReducer
+  user: userReducer,
+  val: valueReducer,
+  ind: indexReducer,
+  arr: arrReducer,
+  col: colorReducer,
 });
 
 const persistConfig = {
