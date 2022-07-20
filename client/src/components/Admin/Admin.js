@@ -30,7 +30,7 @@ return (
 
     <div className='admin_nav'>
     <span>Baccarat</span>
-    <span> <a><PersonIcon fontSize='20px' sx={{marginRight:'5px'}}/>Profile</a> <a onClick={handleClick} style={{paddingLeft:'2rem'}}><LogoutIcon fontSize='20px' sx={{marginRight:'5px'}}/>Logout</a> </span>
+    <span> <a style={{color:'black'}}><PersonIcon fontSize='20px' sx={{marginRight:'5px'}}/>superadmin</a> <a onClick={handleClick} style={{paddingLeft:'2rem' , color:'black'}}><LogoutIcon fontSize='20px' sx={{marginRight:'5px'}}/>Logout</a> </span>
     </div>
     <div style={{marginTop:'5rem' , marginLeft:'1rem' , marginBottom:'-1.5rem'}}>
 
