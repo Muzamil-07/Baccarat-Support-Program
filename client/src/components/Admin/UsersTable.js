@@ -1,15 +1,115 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Form, Input, InputNumber, Popconfirm, Table, Typography , Tooltip, message } from 'antd';
 import { useGetAllUsersQuery, useUpdateDurationMutation, useUpdatePasswordMutation } from '../../services/nodeApi';
 import Countdown from "react-countdown";
 import { async } from 'regenerator-runtime';
+import { SearchOutlined } from '@ant-design/icons';
+import { Button, Space } from 'antd';
 
+import Highlighter from 'react-highlight-words';
 
 
 export default function UsersTable() {
 
   const [ updatePassword ]=useUpdatePasswordMutation();
   const [ updateDuration] = useUpdateDurationMutation();
+  const [ searchText, setSearchText ]=useState( '' );
+  const [ searchedColumn, setSearchedColumn ]=useState( '' );
+  const searchInput=useRef( null );
+
+  const handleSearch=( selectedKeys, confirm, dataIndex ) => {
+    confirm();
+    setSearchText( selectedKeys[ 0 ] );
+    setSearchedColumn( dataIndex );
+  };
+
+  const handleReset=( clearFilters ) => {
+    clearFilters();
+    setSearchText( '' );
+  };
+
+  const getColumnSearchProps=( dataIndex ) => ( {
+    filterDropdown: ( { setSelectedKeys, selectedKeys, confirm, clearFilters } ) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[ 0 ]}
+          onChange={( e ) => setSelectedKeys( e.target.value? [ e.target.value ]:[] )}
+          onPressEnter={() => handleSearch( selectedKeys, confirm, dataIndex )}
+          style={{
+            marginBottom: 8,
+            display: 'block',
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch( selectedKeys, confirm, dataIndex )}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters&&handleReset( clearFilters )}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+
+        </Space>
+      </div>
+    ),
+    filterIcon: ( filtered ) => (
+      <SearchOutlined
+        style={{
+          color: filtered? '#1890ff':undefined,
+        }}
+      />
+    ),
+    onFilter: ( value, record ) =>
+      record[ dataIndex ].toString().toLowerCase().includes( value.toLowerCase() ),
+    onFilterDropdownVisibleChange: ( visible ) => {
+      if ( visible ) {
+        setTimeout( () => searchInput.current?.select(), 100 );
+      }
+    },
+    render: ( text ) =>
+      searchedColumn===dataIndex? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: '#ffc069',
+            padding: 0,
+          }}
+          searchWords={[ searchText ]}
+          autoEscape
+          textToHighlight={text? text.toString():''}
+        />
+      ):(
+        text
+      ),
+  } );
+
+
+
+
+
+
+
+
+
+
 
   const Completionist=() => {
     return <span>Logged out</span>
@@ -53,16 +153,6 @@ export default function UsersTable() {
 
 
 
-const onSearch = (e) => {
-
-  const filteredData = originData.filter(entry =>
-    entry.userid.toLowerCase().includes(e.target.value.toLowerCase())
-  );
-   
-  console.log(filteredData)
-  if(filteredData.length === 0) setData([])
-  else setData(filteredData)
-};
 
 const [PASSWORD, setPASSWORD] = useState('');
 
@@ -160,14 +250,10 @@ const EditableCell = ({
   };
 
 
-  const handleAllotTimeClick = async(e,values)=>{
-    const res = await updateDuration();
-    console.log(values)
-
-  }
 
   const columns = [
     {
+      key: 'no',
         title:'No.',
         dataIndex:'no',
         width:'5%',
@@ -175,12 +261,15 @@ const EditableCell = ({
     },
 
     {
+      key: 'userid',
       title: 'UserID',
       dataIndex: 'userid',
       width: '20%',
       editable: false,
+      ...getColumnSearchProps( 'userid' )
     },
     {
+      key: 'password',
       title: 'Password',
       dataIndex: 'password',
       width: '18%',
@@ -245,7 +334,6 @@ const EditableCell = ({
   const confirm = async(record) => {    
     const res = await updateDuration({
       id: record.key,
-      duration: 24
       })
     if(res.data.status.includes("successfully")){
       message.success("24 Hours added to this user successfully!")
@@ -283,18 +371,7 @@ const EditableCell = ({
       {!isLoading&&originData.length>0&&
         <div>
 
-          <Search
-      placeholder="Search by UserID"
-      // onSearch={onSearch}
-      onChange={onSearch}
-      style={{
-        display:'flex',
-        alignItems:'flex-end',
-        width: 200,
-        marginLeft:'auto'
-        
-      }}
-    />
+
           <Form form={form} onFinish={onFinish} component={false}>
       <Table
       style={{marginTop:'1rem'}}
