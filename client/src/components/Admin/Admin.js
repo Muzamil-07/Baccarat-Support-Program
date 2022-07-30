@@ -21,7 +21,7 @@ const handleClick = ()=>{
 
   setTimeout( () => {
     handleLogout();
-    navigate( '/login' );
+    navigate( '/' );
   
   }, 1000 )
 }

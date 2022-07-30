@@ -21,7 +21,6 @@ export const colorSlice=createSlice( {
 
     setColors: ( state, action ) => {
       state.colors=action.payload
-      console.log( "-----------=--=--=-=-==-=", action.payload )
     },
 
 

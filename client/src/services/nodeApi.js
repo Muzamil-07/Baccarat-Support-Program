@@ -1,7 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Cookies from 'js-cookie';
 
-const baseUrl="http://127.0.0.1:3001/api/v1";
+// const baseUrl="https://baccaratapp.herokuapp.com/api/v1";  
+const baseUrl="https://baccaratapi.aidb.vip/api/v1/";
+
+// const baseUrl="http://127.0.0.1:3001/api/v1";
+
+
 
 export const nodeApi=createApi( {
   reducerPath: "nodeApi",
@@ -56,7 +61,7 @@ export const nodeApi=createApi( {
         method: "PATCH",
         body,
         headers: {
-          authorization: `Bearer ${Cookies.get( "jwt" )}`,
+          authorization: `Bearer ${Cookies.get( "jwt")}`,
         },
       } ),
       invalidatesTags: [ "Users" ],
@@ -84,10 +89,25 @@ export const nodeApi=createApi( {
         method: "POST",
         body,
         headers: {
+          authorization: `Bearer ${Cookies.get( "jwt")}`,
+        },
+
+      } ),
+    } ),
+
+    //******** Delete User
+    deleteUser: builder.mutation( {
+
+      query: ( body ) => ( {
+        url: `/users/deleteuser/${body.id}`,
+        method: "DELETE",
+        headers: {
           authorization: `Bearer ${Cookies.get( "jwt" )}`,
         },
 
       } ),
+
+      invalidatesTags: [ "Users" ],
     } ),
 
 
@@ -103,5 +123,5 @@ export const {
   useSignupMutation,
   useUpdateDurationMutation,
   useUpdatePasswordMutation,
-  useGetAllUsersQuery, useGetPatternMutation
+  useGetAllUsersQuery, useGetPatternMutation, useDeleteUserMutation
 }=nodeApi;

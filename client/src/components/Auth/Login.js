@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Col, Row } from 'antd';
 import { Button, Form, Input , notification} from 'antd';
 import { Link } from "react-router-dom";
@@ -17,13 +17,15 @@ export default function Login() {
 
   const navigate=useNavigate();
 
-  
+  const [ loading, setLoading ]=useState( false );
 
   const onFinish=async ( values ) => {
 
-    try{
-    const res=await login( values );
-    if ( res.data?.status==='success' ) {
+    try {
+      setLoading( true );
+      const res=await login( values );
+      if ( res.data?.status==='success' ) {
+        setLoading( false );
       if ( res.data.data.user.role==='admin' ) {
         message.success( '로그인 성공' );
         Cookie.set( 'jwt', res.data.token );
@@ -34,6 +36,7 @@ export default function Login() {
       }
 
       else if ( res.data.data.user.role==='user' ) {
+        setLoading( false );
         message.success( '로그인 성공' );
         dispatch( setuserData( res.data.data.user ) );
         Cookie.set( 'jwt', res.data.token );
@@ -44,14 +47,16 @@ export default function Login() {
         }, 2000 )
       }
     }
-    else if(res.error.data.message.includes('잘못된 이메일 또는 비밀번호')){
+      else if ( res.error.data.message.includes( 'Incorrect email or password' ) ) {
+        setLoading( false );
       message.error(res.error.data.message)
     }
-    else if(res.error.data.message.includes('당신은 시간이 없습니다')){
-      console.log(res)
+      else if ( res.error.data.message.includes( 'You are out of time' ) ) {
+        setLoading( false );
       notification.warning({message:'시간 중!',description:`${res.error.data.message}`,duration:0})
     }
-  }catch(err){
+    } catch ( err ) {
+      setLoading( false )
     // message.error(err.response.data.message)
   }
 
@@ -125,7 +130,7 @@ export default function Login() {
               <Form.Item style={{ textAlign: 'center' }}>
                
 
-                  <Button htmlType="submit" style={{ paddingLeft: '4rem', paddingRight: '4rem', color: 'white', backgroundColor: 'rgb(228 179 3)' }}>
+                <Button htmlType="submit" style={{ paddingLeft: '4rem', paddingRight: '4rem', color: 'white', backgroundColor: 'rgb(228 179 3)' }} loading={loading}>
                   로그인
                 </Button>
 
@@ -134,7 +139,7 @@ export default function Login() {
             </Form>
 
             <div style={{ textAlign: 'center' }}>
-              <Link to='/' className='signup_link'>계정을 만드시겠습니까? 가입하기</Link>
+              <Link to='/signup' className='signup_link'>계정을 만드시겠습니까? 가입하기</Link>
             </div>
           </div>
         </Col>

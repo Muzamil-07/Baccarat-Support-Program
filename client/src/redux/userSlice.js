@@ -20,7 +20,6 @@ export const userSlice=createSlice( {
   
     setuserData: ( state, action ) => {
       state.userData=action.payload
-      console.log("-----------=--=--=-=-==-=",action.payload)
     },
 
 

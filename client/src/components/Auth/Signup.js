@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import './Signup.css'
 import { Col, Row } from 'antd';
@@ -7,11 +7,15 @@ import { Link } from "react-router-dom";
 import { useSignupMutation } from '../../services/nodeApi';
 export default function Signup() {
 
+  const [ loading, setLoading ]=useState( false )
+
   const [signup] = useSignupMutation();
   const navigate = useNavigate();
   const onFinish=async( values ) => {
 
-    try{
+    try {
+
+      setLoading( true );
     const res = await signup(
       {
         userId: values.userid,
@@ -20,7 +24,8 @@ export default function Signup() {
 
       }
     );
-    if(res.data?.status === 'success'){
+      if ( res.data?.status==='success' ) {
+        setLoading( false );
       message.success("Signed up succesfully!")
 
       setTimeout( () => {
@@ -28,15 +33,15 @@ export default function Signup() {
       }, 2000 )
     }
     else if(res.error.data.message.includes('Password must be of atleast 8 characters long')){
-      message.error("Password must be of atleast 8 characters long")
+        setLoading( false );
+        message.error( "Password must be of atleast 8 characters long" )
     }
-  }catch(err){
-    // console.log(err.response.data.message)
+    } catch ( err ) {
+      setLoading( false )
   }
   };
 
   const onFinishFailed=( errorInfo ) => {
-    console.log( 'Failed:', errorInfo );
   };
   return (
     <div className='main'>
@@ -108,14 +113,14 @@ export default function Signup() {
               </Form.Item>
 
               <Form.Item style={{ textAlign: 'center' }}>
-                  <Button htmlType="submit" style={{ paddingLeft: '4rem', paddingRight: '4rem', color: 'white', backgroundColor: 'rgb(228 179 3)' }}>
+                <Button htmlType="submit" style={{ paddingLeft: '4rem', paddingRight: '4rem', color: 'white', backgroundColor: 'rgb(228 179 3)' }} loading={loading}>
                   가입하기
                   </Button>
               </Form.Item>
             </Form>
 
             <div style={{ textAlign: 'center' }}>
-              <Link to='/login' className='login_link'>이미 계정이 있습니까? 로그인</Link>
+              <Link to='/' className='login_link'>이미 계정이 있습니까? 로그인</Link>
             </div>
 
           </div>

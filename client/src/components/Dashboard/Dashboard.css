@@ -97,14 +97,14 @@
 }
 
 .course_red {
-  background-color: rgb(255, 144, 144);
-  color: red;
+  background-color: red;
+  color: white;
   border: 5px solid red;
 }
 
 .course_blue {
-  background-color: rgba(108, 108, 251, 1);
-  color: blue;
+  background-color: blue;
+  color: white;
   border: 5px solid blue;
 }
 
@@ -115,19 +115,19 @@
   margin-top: 5px;
 }
 
-.bet_amount.bet_amount_blue {
+.bet_amount.bet_amount_blue , .amount.bet_amount_blue{
   color: blue;
 
 }
 
-.bet_amount.bet_amount_red {
+.bet_amount.bet_amount_red , .amount.bet_amount_red {
   color: red;
 
 }
 .box_btn {
-  width: 80px !important;
+  width: 110px !important;
   height: 50px !important;
-  font-size: 14px !important;
+  font-size: 20px !important;
   font-weight: bold !important;
   padding: 3px 10px 10px 10px !important;
   border-radius: 10px !important;
@@ -135,15 +135,19 @@
 }
 
 .box_btn2 {
-  width: 70px !important;
-  height: 30px !important;
-  font-size: 10px !important;
+  width: 100px !important;
+  height: 45px !important;
+  font-size: 16px !important;
   font-weight: bold !important;
   padding:5px 2px 5px 2px !important;
   border-radius: 10px !important;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px !important;
   background-color: none !important;
   border: 1px solid rgba(0, 0, 0, 0.877) !important;
+}
+.box_btn2.setting_btn{
+  width: 100px !important;
+  height: 45px !important;
 }
 
 .box_btn2:hover {
@@ -153,35 +157,35 @@
 
 
 .loose_btn {
-  background-color: rgb(234, 0, 0) !important;
+  background-color: black !important;
   border: none !important;
   outline: none;
 }
 
 .loose_btn:hover {
-  background-color: rgb(255, 0, 0) !important;
+  background-color: rgb(45,45,45) !important;
 }
 
 .win_btn {
-  background-color: green !important;
+  background-color: black !important;
   border: none !important;
   outline: none;
 }
 
 .win_btn:hover {
-  background-color: rgb(3, 139, 3) !important;
+  background-color:rgb(45, 45, 45) !important;
 }
 
 .box_btn.tie_btn {
-  background-color: rgb(40, 40, 40) !important;
+  background-color: green !important;
   border: none !important;
-  width: 70px !important;
-  height: 40px !important;
+  width: 100px !important;
+  height: 45px !important;
   outline: none;
 }
 
 .tie_btn:hover {
-  background-color: rgb(68, 68, 68) !important;
+  background-color: rgb(0, 174, 0) !important;
 }
 
 .arrow_box {
@@ -191,17 +195,19 @@
 
 .arrows {
   border: 1px solid black;
-  font-size: 10px !important;
+  width: 60px;
+  font-size: 11px !important;
   transition: all 1s;
+ 
 }
 
-/* .arrows:hover {
-  cursor: pointer;
-  color: white !important;
-  background-color: black !important;
+.arrows:hover {
+  outline: none;
+  color: black;
+  border: 1px solid black;
 }
 
-*/
+
 
 .course_inputBox {
   border: 1px solid rgb(49, 49, 49);
@@ -230,4 +236,52 @@
 .setting_modal .ant-modal-footer .ant-btn-primary:hover{
   color: white !important;
   background:blue !important;
+}
+
+
+
+/* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"MEDIA QUERIES"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
+/* >>>>>>>>>>>>>>>>>>>>Small Devices */
+@media(min-width:768px) and (max-width:991px) {
+
+  .header_main,.header_main_text,.header_secondary_text{
+    font-size: 13px;
+  }
+  
+  .main_box {
+    width: 65%;
+  }
+}
+
+
+/* >>>>>>>>>>>>>>>>>>>>Extra Small Devices */
+@media(min-width:576px) and (max-width:767px){
+  .header_main,.header_main_text{
+    font-size: 9px;
+  }
+  .header_secondary_text{
+    font-size: 13px;
+  }
+
+  .main_box {
+    width: 90%;
+  }
+  
+
+}
+
+
+
+/* >>>>>>>>>>>>>>>>>>>>Extra-Extra Small Devices */
+@media(max-width:575px) {
+  .header_main,.header_main_text{
+    font-size: 8px;
+  }
+ 
+  .header_secondary_text{
+    font-size: 13px;
+  }
+  .main_box {
+    width: 98%;
+  }
 }

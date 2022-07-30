@@ -19,27 +19,22 @@ export const valueSlice=createSlice( {
 
     setuserData: ( state, action ) => {
       state.userData=action.payload
-      console.log( "-----------=--=--=-=-==-=", action.payload )
     },
 
     setIndex: ( state, action ) => {
       state.index=action.payload
-      console.log( "-----------=--=--=-=-==-=", action.payload )
     },
 
     setValue: ( state, action ) => {
       state.value=action.payload
-      console.log( "-----------=--=--=-=-==-=", action.payload )
     },
 
     setColors: ( state, action ) => {
       state.colors=action.payload
-      console.log( "-----------=--=--=-=-==-=", action.payload )
     },
 
     setArr: ( state, action ) => {
       state.arr=action.payload
-      console.log( "-----------=--=--=-=-==-=", action.payload )
     },
 
   },

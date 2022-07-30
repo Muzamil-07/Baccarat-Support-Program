@@ -21,7 +21,6 @@ export const arrSlice=createSlice( {
 
     setArr: ( state, action ) => {
       state.arr=action.payload
-      console.log( "-----------=--=--=-=-==-=", action.payload )
     },
 
   },

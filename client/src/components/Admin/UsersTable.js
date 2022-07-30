@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Form, Input, InputNumber, Popconfirm, Table, Typography , Tooltip, message } from 'antd';
-import { useGetAllUsersQuery, useUpdateDurationMutation, useUpdatePasswordMutation } from '../../services/nodeApi';
+import { useDeleteUserMutation, useGetAllUsersQuery, useUpdateDurationMutation, useUpdatePasswordMutation } from '../../services/nodeApi';
 import Countdown from "react-countdown";
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Space } from 'antd';
+import { Spin } from 'antd';
 
 import Highlighter from 'react-highlight-words';
 
@@ -13,8 +14,12 @@ export default function UsersTable() {
   const editRef = useRef(null);
   const refForm = useRef(null);
 
+  const [ loading, setLoading ]=useState( false )
+
   const [ updatePassword ]=useUpdatePasswordMutation();
-  const [ updateDuration] = useUpdateDurationMutation();
+  const [ updateDuration ]=useUpdateDurationMutation();
+  const [ deleteUser ]=useDeleteUserMutation();
+
   const [ searchText, setSearchText ]=useState( '' );
   const [ searchedColumn, setSearchedColumn ]=useState( '' );
   const searchInput=useRef( null );
@@ -73,6 +78,8 @@ export default function UsersTable() {
 초기화
 
           </Button>
+
+
 
         </Space>
       </div>
@@ -233,16 +240,21 @@ const EditableCell = ({
   const save = async (key) => {
     try {
       const row = await form.validateFields();
-      const newData = [...data];
+      const newData=[ ...data ];
+      setLoading( true );
       const res = await updatePassword({
         id:key,
         password:PASSWORD
-      })
-      if(res.data.status === 'success'){
+      } )
+
+
+      if ( res.data.status==='success' ) {
+        setLoading( false );
         message.success({
           content:`비밀번호가 성공적으로 업데이트되었습니다.`,
         })
-      }else{
+      } else {
+        setLoading( false );
         message.error("문제가 발생했습니다 다시 시도하십시오")
       }
 
@@ -259,7 +271,6 @@ const EditableCell = ({
         setEditingKey('');
       }
     } catch (errInfo) {
-      console.log('Validate Failed:', errInfo);
     }
   };
 
@@ -333,31 +344,66 @@ const EditableCell = ({
           <Typography.Link disabled={editingKey !== ''}  onClick={() => {
             edit(record)
             }}>
-          편집하다
+                  비번 변경
           </Typography.Link>
           </Tooltip>
           <Tooltip title='이 사용자에게 추가 시간 할당' placement='bottom'>
           <Popconfirm placement="top" title='이 사용자에게 24시간을 할당하시겠습니까' onConfirm={()=>confirm(record)} okText="Yes" cancelText="No">
           <Typography.Link style={{paddingLeft:'2rem'}}>
-할당 시간</Typography.Link>
+                    시간 추가</Typography.Link>
+
           </Popconfirm>
-          </Tooltip>
+              </Tooltip>
+
+
+              <Tooltip title='사용자 삭제' placement='bottom'>
+                <Popconfirm placement="top" title='이 사용자를 삭제하시겠습니까?' onConfirm={() => confirmDelete( record )} okText="Yes" cancelText="No">
+                  <Typography.Link style={{ paddingLeft: '2rem' }}>
+                    ID 삭제</Typography.Link>
+
+                </Popconfirm>
+              </Tooltip>
+
+
+
+
+
             </>
         );
       },
     },
   ];
 
-  const confirm = async(record) => {    
+  const confirm=async ( record ) => {
+    setLoading( true );
     const res = await updateDuration({
       id: record.key,
       })
-    if(res.data.status.includes("successfully")){
+    if ( res.data.status.includes( "successfully" ) ) {
+      setLoading( false );
       message.success("이 사용자에게 24시간이 성공적으로 추가되었습니다")
-    }else{
+    } else {
+      setLoading( false );
       message.error("문제가 발생했습니다 다시 시도하십시오")
     }
-}
+  }
+  const confirmDelete=async ( record ) => {
+    setLoading( true );
+    const res=await deleteUser( {
+      id: record.key,
+    } )
+
+
+
+    if ( res.data.status==="success" ) {
+      setLoading( false );
+      message.success( "사용자가 성공적으로 삭제되었습니다" )
+    } else {
+      setLoading( false );
+      message.error( "사용자를 찾을 수 없음" )
+    }
+
+  }
 
   const mergedColumns = columns.map((col) => {
     if (!col.editable) {
@@ -379,33 +425,36 @@ const EditableCell = ({
   } );
 
   const onFinish=( values ) => {
-    console.log( values )
   }
 
 
   return (
     <>
       {!isLoading&&originData.length>0&&
-        <div>
 
-          <Form form={form} ref={refForm} onFinish={onFinish} component={false}>
-      <Table
-      style={{marginTop:'1rem'}}
-        components={{
-          body: {
-            cell: EditableCell,
-          },
-        }}
-        bordered
-              dataSource={originData}
-        columns={mergedColumns}
-        rowClassName="editable-row"
-        pagination={{
-          onChange: cancel,
-        }}
-      />
-    </Form>
-        </div>
+        <Spin spinning={loading} >
+          <div>
+
+            <Form form={form} ref={refForm} onFinish={onFinish} component={false}>
+              <Table
+                style={{ marginTop: '1rem' }}
+                components={{
+                  body: {
+                    cell: EditableCell,
+                  },
+                }}
+                bordered
+                dataSource={originData}
+                columns={mergedColumns}
+                rowClassName="editable-row"
+                pagination={{
+                  onChange: cancel,
+                }}
+              />
+            </Form>
+          </div>
+        </Spin>
+
       }
     </>
   )

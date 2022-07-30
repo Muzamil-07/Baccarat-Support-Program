@@ -13,6 +13,10 @@ import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 
 
+
+
+
+
 function App() {
   return (
     <>
@@ -27,8 +31,8 @@ function App() {
             <ProtectedRoute role={[ 'user' ]}>  <Dashboard /> </ProtectedRoute>
           } />
 
-          <Route path='login' element={<Login />} />
-          <Route path='/' element={<Signup />} />
+          <Route path='/' element={<Login />} />
+          <Route path='signup' element={<Signup />} />
 
         </Routes>
       </BrowserRouter>

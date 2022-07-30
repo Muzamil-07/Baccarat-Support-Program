@@ -21,7 +21,6 @@ export const indexSlice=createSlice( {
 
     setIndex: ( state, action ) => {
       state.index=action.payload
-      console.log( "-----------=--=--=-=-==-=", action.payload )
     },
 
 
