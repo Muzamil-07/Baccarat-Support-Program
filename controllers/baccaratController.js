@@ -11,7 +11,7 @@ exports.getBaccarat=catchAsync( async ( req, res, next ) => {
   let {selAmount,selLevel}=req.body;
   let bac=await Baccarat.find( { selAmount: Number( selAmount ) } );
 
-  console.log(bac);
+  (bac);
 
   if ( !bac ) {
       return next( new AppError( `Could not found pattern`, 404 ) );

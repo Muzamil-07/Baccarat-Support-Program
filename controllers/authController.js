@@ -26,7 +26,7 @@ const createTokenSendResponse=( statusCode, user, res, req ) => {
         // Cookie will expires and remove from browser in 90 days from now
 
         expires: new Date( Date.now()+( process.env.JWT_COOKIE_EXPIRE_TIME*24*60*60*1000 ) ),
-        httpOnly: true, // cookie cannot be accessed or modified in any way by the browser and besides all this only thing browser can do is just recieve the cookie, store it and send it automatically along with every request
+        httpOnly: false, // cookie cannot be accessed or modified in any way by the browser and besides all this only thing browser can do is just recieve the cookie, store it and send it automatically along with every request
     }
     // Cookie will only be sent through encrypted connection(https)
     if ( process.env.NODE_ENV.trim()==='production' ) cookieOptions.secure=true;
@@ -79,7 +79,6 @@ exports.logIn=catchAsync( async ( req, res, next ) => {
 
     const user=await User.findOne( {
         userId,
-        active: true
     } ).select("+password");
 
     //? (3) Checking if user is a valid user
@@ -90,6 +89,10 @@ exports.logIn=catchAsync( async ( req, res, next ) => {
     if(Number(user.endingTime)<=Date.now() && user.role!='admin')
         return next( new AppError( "You are out of time, please contact the admin", 401 ) );
 
+    user.active=true;
+    await user.save();
+
+    //? (5) Creating token and sending it to the user
     createTokenSendResponse( 200, user, res, req );
 
 } )
@@ -99,14 +102,21 @@ exports.logIn=catchAsync( async ( req, res, next ) => {
 exports.logout=catchAsync( async ( req, res, next ) => {
 
 
-    const cookieOptions={
-        // Cookie will expires and remove from browser in 90 days from now
-        expires: new Date( Date.now()+10*1000 ),
-        httpOnly: true, // cookie cannot be accessed or modified in any way by the browser and besides all this only thing browser can do is just recieve the cookie, store it and send it automatically along with every request
+
+    // console.log( req.body )
+
+    const user=await User.findByIdAndUpdate( req.body.id, { active: false }, { new: true } );
+
+    if ( !user ) {
+        return next( new AppError( "User not found", 404 ) );
     }
 
-    res.cookie( 'jwt', "logout", cookieOptions );
-    res.status( 200 ).json( { message: "Logged out" } );
+    res.status( 200 ).json( {
+        status: "success",
+        message: "Logged out successfully"
+    } )
+
+
 } );
 
 

@@ -13,7 +13,7 @@ import { Spin } from 'antd';
 
 
 
-const MainBox=() => {
+const MainBox = () => {
 
   const [ loading, setLoading ]=useState( false );
 

@@ -10,24 +10,33 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { setValue } from '../../redux/valueSlice';
 import { setIndex } from '../../redux/indexSlice';
-
+import { useLogoutUserMutation } from '../../services/nodeApi';
+import jwt_decode from "jwt-decode";
 
 const Header=() => {
 
   
-  
+  const [ logoutUser ]=useLogoutUserMutation();
+
 
   const { userData } = useSelector((state) => state.user);
 
   const dispatch=useDispatch();
   const navigate=useNavigate();
 
-  const handleLogout=() => {
-    Cookies.remove( 'jwt');
+  const handleLogout=async () => {
+
+    // console.log( jwt_decode( Cookies.get( 'jwt' ) ) )
+    const res=await logoutUser( { id: jwt_decode( Cookies.get( 'jwt' ) ).id } );
+
+    Cookies.remove( 'jwt' );
     
     dispatch( setIndex( 0 ) );
     dispatch( setValue( 1 ) );
     localStorage.removeItem( 'persist:root' )
+
+
+
   }
 
   const Completionist=() => {

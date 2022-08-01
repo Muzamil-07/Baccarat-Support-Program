@@ -86,6 +86,7 @@ module.exports=( err, req, res, next ) => {
     } else if ( process.env.NODE_ENV.trim()==='production' ) {
 
         const errorName=err.name;
+        console.log("------------------->",errorName)
         let error={
             ...err
         };

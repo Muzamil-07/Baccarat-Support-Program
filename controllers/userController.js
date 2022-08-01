@@ -1,6 +1,7 @@
 const User=require("../models/userModel")
 const factory=require( './FactoryHandler' );
 const catchAsync =require("../utils/catchAysnc")
+const AppError=require( "../utils/appError" )
 
 //Todo:  ************************** helper functuions ******************************
 
@@ -42,4 +43,35 @@ exports.setDuration=catchAsync(async (req,res,next)=>{
   res.status( 200 ).json( {
     status: `Duration has been set successfully.`,
 } );
-})
+} )
+
+
+// FIX: Delete user (By Admins)
+exports.deleteUser=catchAsync( async ( req, res, next ) => {
+  const user=await User.findByIdAndDelete( req.params.id )
+  console.log( "===>", user )
+
+  if ( !user ) {
+    return next( new AppError( `Could not find the document with ID: ${req.params.id}`, 404 ) );
+  }
+
+  res.status( 200 ).json( {
+    status: 'success',
+  } );
+
+} )
+
+exports.checkAlreadyLoginState=catchAsync( async ( req, res, next ) => {
+  const user=await User.findOne( { userId: req.body.userId } );
+
+  if ( !user ) {
+    return next( new AppError( `Could not find the document with ID: ${req.params.id}`, 404 ) );
+  }
+
+  if ( user.active ) {
+    return next( new AppError( `User is already logged in.`, 401 ) );
+  }
+
+  next();
+
+} )

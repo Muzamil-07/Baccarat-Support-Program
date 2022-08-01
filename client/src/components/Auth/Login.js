@@ -41,10 +41,14 @@ export default function Login() {
         dispatch( setuserData( res.data.data.user ) );
         Cookie.set( 'jwt', res.data.token );
 
+        localStorage.setItem( 'jwt', res.data.token );
+
 
         setTimeout( () => {
           navigate( "/dashboard" );
         }, 2000 )
+
+
       }
     }
       else if ( res.error.data.message.includes( 'Incorrect email or password' ) ) {
@@ -55,6 +59,13 @@ export default function Login() {
         setLoading( false );
       notification.warning({message:'시간 중!',description:`${res.error.data.message}`,duration:0})
     }
+      else if ( res.error.data.message.includes( 'User is already logged in' ) ) {
+        setLoading( false );
+        notification.warning( {
+          message: '시간 중!', description: `${'이미 다른 기기에 로그인되어 있습니다'}`, duration: 0
+        } )
+      }
+
     } catch ( err ) {
       setLoading( false )
     // message.error(err.response.data.message)
