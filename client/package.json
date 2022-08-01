@@ -2,6 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://aidb.vip",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@emotion/react": "^11.9.3",

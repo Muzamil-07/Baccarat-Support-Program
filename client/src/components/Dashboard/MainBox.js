@@ -65,6 +65,7 @@ const MainBox=() => {
     const res=await getPattern( { selAmount: amount, selLevel: level } );
     setLoading( false );
     dispatch( setArr( res.data.data ) );
+    setArrr(res.data.data);
     dispatch( setValue( 1 ) )
     dispatch( setIndex( 0 ) );
     randomColors();
@@ -260,7 +261,7 @@ const MainBox=() => {
               <Option value="1000">1000</Option>
               <Option value="2000">2000</Option>
               <Option value="3000">3000</Option>
-              <Option value="30009">3000-9</Option>
+              <Option value="30009"  disabled={level==='8'|| level==='10'}>3000-9</Option>
             </Select>
           </div>
           <div style={{ textAlign: 'center', padding: '1rem' }}>설정 레벨</div>

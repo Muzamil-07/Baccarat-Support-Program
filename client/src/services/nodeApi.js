@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import Cookies from 'js-cookie';
 
 // const baseUrl="https://baccaratapp.herokuapp.com/api/v1";  
-const baseUrl="https://baccaratapi.aidb.vip/api/v1/";
+const baseUrl="https://api.aidb.vip/api/v1/";
 
 // const baseUrl="http://127.0.0.1:3001/api/v1";
 
